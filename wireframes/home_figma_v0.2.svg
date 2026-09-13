@@ -1,0 +1,28 @@
+<svg class="w-3.5 h-3.5 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+201:             </button>
+202:           </div>
+203:         </div>
+204:       </header>
+205: 
+206:       <!-- ================================================================= -->
+207:       <!-- TEMPLATE 1: HOME PAGE (front-page.php)                            -->
+208:       <!-- ================================================================= -->
+209:       <section id="template-home" class="template-view">
+210:         
+211:         <!-- Full-bleed Hero Block -->
+212:         <div class="bg-slate-900 text-white py-20 lg:py-28 px-6 lg:px-16 border-b border-slate-800">
+213:           <div class="max-w-6xl mx-auto">
+214:             <div class="inline-flex items-center space-x-2 bg-slate-800/90 border border-slate-700 rounded px-3 py-1 text-xs font-mono text-slate-300 mb-6">
+215:               <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+216:               <span>Working director model • Commercial electrical contracting & safety compliance</span>
+217:             </div>
+218:             <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-6 max-w-4xl">
+219:               Direct director oversight on every commercial project.
+220:             </h1>
+221:             <p class="text-base sm:text-lg text-slate-300 max-w-3xl leading-relaxed mb-10">
+222:               Headquartered in Brisbane with statewide Queensland delivery. Over 20 years of commercial electrical contracting, in-house design capabilities, and statutory compliance with zero safety compromise.
+223:             </p>
+224:             <div class="flex flex-wrap items-center gap-4">
+225:               <button onclick="switchTemplate('capability')" class="bg-white hover:bg-slate-100 text-slate-950 font-bold px-6 py-3.5 rounded text-xs sm:text-sm shadow-md transition flex items-center">
+226:                 Download 2026 capability statement [PDF]
+227:                 <svg class="w-4 h-4 ml-2 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>

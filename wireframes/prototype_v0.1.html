@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energize Industries — Schematic Wireframe Prototype (WordPress Edition)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            blueprint: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          },
+          fontFamily: {
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+            sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .blueprint-grid {
+      background-size: 24px 24px;
+      background-image: 
+        linear-gradient(to right, rgba(203, 213, 225, 0.35) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(203, 213, 225, 0.35) 1px, transparent 1px);
+    }
+    .placeholder-box {
+      background-color: #f8fafc;
+      border: 1.5px dashed #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      font-family: ui-monospace, monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-spec {
+      font-family: ui-monospace, monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* Live Visual Editor Styles */
+    body.editor-active [data-editable="true"] {
+      transition: outline 0.15s ease, background-color 0.15s ease;
+      cursor: text !important;
+    }
+    body.editor-active [data-editable="true"]:hover {
+      outline: 2px dashed #2563eb !important;
+      outline-offset: 2px;
+      background-color: rgba(239, 246, 255, 0.7) !important;
+    }
+    body.editor-active [data-editable="true"]:focus {
+      outline: 2px solid #2563eb !important;
+      outline-offset: 2px;
+      background-color: rgba(219, 234, 254, 0.95) !important;
+    }
+    body.editor-active .editor-selectable {
+      position: relative;
+    }
+    body.editor-active .editor-selectable:hover {
+      box-shadow: 0 0 0 2px #3b82f6 !important;
+    }
+    body.editor-active .editor-selected {
+      box-shadow: 0 0 0 3px #2563eb !important;
+    }
+
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-800 antialiased font-sans flex flex-col min-h-screen">
+
+  <!-- TOP PROTOTYPE CONTROL TOOLBAR -->
+  <header class="sticky top-0 z-50 bg-slate-900 border-b border-slate-700 text-white px-4 py-2.5 shadow-md">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center space-x-3">
+        <div class="bg-blue-600 text-white text-xs font-mono font-bold px-2.5 py-1 rounded">WP SCHEMATIC</div>
+        <div>
+          <span class="font-bold text-sm text-slate-100 tracking-tight">ENERGIZE INDUSTRIES</span>
+          <span class="text-xs text-slate-400 font-mono ml-2 hidden sm:inline">IA & Wireframe Prototype</span>
+        </div>
+      </div>
+
+      <!-- Page Template Switcher -->
+      <div class="flex items-center overflow-x-auto py-1 scrollbar-none space-x-1 text-xs">
+        <button onclick="switchTemplate('home')" id="btn-home" class="template-btn px-2.5 py-1.5 rounded font-medium transition bg-blue-600 text-white">1. Home</button>
+        <button onclick="switchTemplate('why')" id="btn-why" class="template-btn px-2.5 py-1.5 rounded font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700">2. Why Energize</button>
+        <button onclick="switchTemplate('services')" id="btn-services" class="template-btn px-2.5 py-1.5 rounded font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700">3. Services</button>
+        <button onclick="switchTemplate('service-detail')" id="btn-service-detail" class="template-btn px-2.5 py-1.5 rounded font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700">4. Service Detail</button>
+        <button onclick="switchTemplate('work')" id="btn-work" class="template-btn px-2.5 py-1.5 rounded font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700">5. Work Portfolio</button>
+        <button onclick="switchTemplate('work-detail')" id="btn-work-detail" class="template-btn px-2.5 py-1.5 rounded font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700">6. Case Study</button>
+        <button onclick="switchTemplate('contact')" id="btn-contact" class="template-btn px-2.5 py-1.5 rounded font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700">7. Contact</button>
+      </div>
+
+      <!-- Viewport & Modals Trigger -->
+      <div class="flex items-center space-x-2 text-xs">
+        <div class="bg-slate-800 p-0.5 rounded border border-slate-700 flex items-center">
+          <button onclick="setViewport('100%')" title="Full Width" id="vp-full" class="px-2 py-1 rounded bg-slate-700 text-white font-mono">Full</button>
+          <button onclick="setViewport('1024px')" title="Tablet" id="vp-tab" class="px-2 py-1 rounded text-slate-400 hover:text-white font-mono">1024</button>
+          <button onclick="setViewport('390px')" title="Mobile" id="vp-mob" class="px-2 py-1 rounded text-slate-400 hover:text-white font-mono">390</button>
+        </div>
+
+        <button id="btn-toggle-editor" onclick="toggleLiveEditor()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold px-2.5 py-1.5 rounded border border-slate-600 transition flex items-center space-x-1"><span>✏️ Visual Editor: OFF</span></button>
+        <button onclick="openModal('quoteModal')" class="bg-slate-100 hover:bg-white text-slate-900 font-semibold px-2.5 py-1.5 rounded border border-slate-300 transition">Test Quote Modal</button>
+        <button onclick="openModal('capModal')" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-2.5 py-1.5 rounded transition">Test Cap Statement</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Prototype Info Banner / Figma Helper -->
+  <div class="bg-slate-800 text-slate-300 text-xs py-1.5 px-4 border-b border-slate-700 flex flex-wrap items-center justify-between gap-2">
+    <div class="flex items-center space-x-2">
+      <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span class="font-mono text-slate-400">WordPress Template:</span>
+      <span id="wp-template-label" class="font-mono font-bold text-amber-300">front-page.php</span>
+    </div>
+    <div class="flex items-center space-x-3 text-slate-400">
+      <span>Figma Workflow: <strong class="text-slate-200">Import directly via 'html.to.design' plugin</strong> with auto-layout preserved</span>
+    </div>
+  </div>
+
+  <!-- MAIN VIEWPORT CONTAINER -->
+  <main class="flex-1 bg-slate-200 py-6 px-2 flex justify-center items-start overflow-y-auto">
+    <div id="viewport-frame" class="w-full max-w-full transition-all duration-300 bg-white shadow-2xl rounded-lg border border-slate-300 overflow-hidden">
+      
+      <!-- GLOBAL SITE HEADER WIREFRAME -->
+      <header class="bg-white border-b border-slate-300 sticky top-0 z-30">
+        <div class="bg-slate-100 border-b border-slate-200 px-6 py-1 text-xs text-slate-600 flex justify-between items-center font-mono">
+          <div class="flex items-center space-x-4">
+            <span>QLD Contractor Lic: <strong>#70739</strong></span>
+            <span class="hidden md:inline">ABN: 39 136 854 754</span>
+            <span class="hidden lg:inline">Master Electricians Australia Member</span>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span>HQ: Geebung, Brisbane</span>
+            <a href="tel:0738656500" class="font-bold text-slate-900 hover:text-blue-600">Ph: (07) 3865 6500</a>
+          </div>
+        </div>
+
+        <div class="px-6 py-3.5 flex items-center justify-between">
+          <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTemplate('home')">
+            <div class="placeholder-box w-10 h-10 rounded font-bold text-slate-800 bg-slate-200 border-slate-400">LOGO</div>
+            <div>
+              <div class="font-black text-lg tracking-tight text-slate-900 leading-none">ENERGIZE</div>
+              <div class="text-[10px] font-mono text-slate-500 uppercase tracking-widest leading-tight">Industries • Safety Management</div>
+            </div>
+          </div>
+
+          <nav class="hidden lg:flex items-center space-x-6 text-sm font-medium text-slate-700">
+            <button onclick="switchTemplate('home')" class="hover:text-slate-950 py-1 border-b-2 border-transparent hover:border-slate-900">Home</button>
+            <button onclick="switchTemplate('why')" class="hover:text-slate-950 py-1 border-b-2 border-transparent hover:border-slate-900">Why Energize</button>
+            <button onclick="switchTemplate('services')" class="hover:text-slate-950 py-1 border-b-2 border-transparent hover:border-slate-900">Services ▾</button>
+            <button onclick="switchTemplate('work')" class="hover:text-slate-950 py-1 border-b-2 border-transparent hover:border-slate-900">Work Portfolio ▾</button>
+            <button onclick="switchTemplate('contact')" class="hover:text-slate-950 py-1 border-b-2 border-transparent hover:border-slate-900">Contact</button>
+          </nav>
+
+          <div class="flex items-center space-x-2.5">
+            <button onclick="openModal('capModal')" class="hidden sm:inline-flex items-center text-xs font-semibold px-3 py-2 rounded border border-slate-300 hover:bg-slate-50 text-slate-800">
+              <svg class="w-3.5 h-3.5 mr-1.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+              Capability Statement [PDF]
+            </button>
+            <button onclick="openModal('quoteModal')" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-3.5 py-2 rounded shadow-sm flex items-center">
+              Request a Quote
+              <svg class="w-3.5 h-3.5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- TEMPLATE 1: HOME PAGE (front-page.php) -->
+      <section id="template-home" class="template-view">
+        <div class="blueprint-grid border-b border-slate-300 py-16 px-6 lg:px-12 bg-white">
+          <div class="max-w-5xl mx-auto">
+            <div class="inline-flex items-center space-x-2 bg-slate-100 border border-slate-300 rounded px-2.5 py-1 text-xs font-mono text-slate-700 mb-6">
+              <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+              <span>WORKING DIRECTOR MODEL • COMMERCIAL CONTRACTING & COMPLIANCE</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4">
+              Direct Working Director Oversight on Every Commercial Project.
+            </h1>
+            <p class="text-lg text-slate-600 max-w-3xl leading-relaxed mb-8">
+              Headquartered in Brisbane with statewide Queensland delivery. Over 20 years of commercial electrical contracting, in-house D&C engineering, and statutory safety compliance with zero safety compromise.
+            </p>
+            <div class="flex flex-wrap items-center gap-4">
+              <button onclick="openModal('capModal')" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-3 rounded text-sm shadow-md flex items-center">
+                Download 2026 Capability Statement [PDF]
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              </button>
+              <button onclick="openModal('quoteModal')" class="bg-white hover:bg-slate-50 text-slate-900 font-semibold px-6 py-3 rounded text-sm border border-slate-300 shadow-sm">
+                Submit Commercial Tender
+              </button>
+              <div class="text-xs font-mono text-slate-500 flex items-center ml-2">
+                <svg class="w-4 h-4 text-emerald-600 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Direct Director Review • 4-Hr SLA
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social Proof Head Contractor Logo Bar -->
+        <div class="bg-slate-50 border-b border-slate-300 py-6 px-6">
+          <div class="max-w-6xl mx-auto">
+            <p class="text-xs font-mono uppercase text-slate-500 text-center tracking-wider mb-4">Trusted Partner to Australia's Leading Head Contractors & National Brands</p>
+            <div class="grid grid-cols-3 sm:grid-cols-6 gap-3 items-center">
+              <div class="placeholder-box h-12 rounded">ADCO</div>
+              <div class="placeholder-box h-12 rounded">HUTCHINSON</div>
+              <div class="placeholder-box h-12 rounded">MAINBRACE</div>
+              <div class="placeholder-box h-12 rounded">COLES GROUP</div>
+              <div class="placeholder-box h-12 rounded">WOOLWORTHS</div>
+              <div class="placeholder-box h-12 rounded">BESIX WATPAC</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unique Differentiators (From Screenshot & Capability Statement) -->
+        <div class="py-16 px-6 lg:px-12 max-w-6xl mx-auto">
+          <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="badge-spec bg-blue-50 text-blue-800 border border-blue-200 px-2 py-0.5 rounded">Core Differentiators</span>
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-2">Why Queensland's Tier-1 Builders Partner with Energize</h2>
+            <p class="text-sm text-slate-600 mt-2">We eliminate the typical disconnect between corporate project management and live site execution.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="border border-slate-300 rounded-lg p-6 bg-white shadow-sm hover:border-slate-400 transition">
+              <div class="w-8 h-8 rounded bg-slate-900 text-white font-mono font-bold flex items-center justify-center text-xs mb-4">01</div>
+              <h3 class="font-bold text-slate-900 text-base mb-2">Direct Director Oversight</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Founders Dan Monti & Jason Edwards personally oversee every commercial job. Instantaneous site decisions, zero corporate latency, and direct strategic support to on-site foremen.
+              </p>
+            </div>
+
+            <div class="border border-slate-300 rounded-lg p-6 bg-white shadow-sm hover:border-slate-400 transition">
+              <div class="w-8 h-8 rounded bg-slate-900 text-white font-mono font-bold flex items-center justify-center text-xs mb-4">02</div>
+              <h3 class="font-bold text-slate-900 text-base mb-2">20+ Years Zero Safety Compromise</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Over two decades of commercial delivery across SEQ with an unblemished safety record. Full alignment with AS/NZS 4801 / ISO 45001 and strict WHS risk governance.
+              </p>
+            </div>
+
+            <div class="border border-slate-300 rounded-lg p-6 bg-white shadow-sm hover:border-slate-400 transition">
+              <div class="w-8 h-8 rounded bg-slate-900 text-white font-mono font-bold flex items-center justify-center text-xs mb-4">03</div>
+              <h3 class="font-bold text-slate-900 text-base mb-2">Complete Turnkey Delivery</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Seamless lifecycle execution: Initial site audit, in-house D&C design, defect-free installation, AS/NZS compliance testing, and certified as-built documentation.
+              </p>
+            </div>
+
+            <div class="border border-slate-300 rounded-lg p-6 bg-white shadow-sm hover:border-slate-400 transition">
+              <div class="w-8 h-8 rounded bg-slate-900 text-white font-mono font-bold flex items-center justify-center text-xs mb-4">04</div>
+              <h3 class="font-bold text-slate-900 text-base mb-2">Rapid Quoting & Clear Communication</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Direct access to our dedicated estimating desk. Guaranteed 4-hour tender acknowledgement, transparent value engineering, and honest program updates.
+              </p>
+            </div>
+
+            <div class="border border-slate-300 rounded-lg p-6 bg-white shadow-sm hover:border-slate-400 transition">
+              <div class="w-8 h-8 rounded bg-slate-900 text-white font-mono font-bold flex items-center justify-center text-xs mb-4">05</div>
+              <h3 class="font-bold text-slate-900 text-base mb-2">In-House Design & Skilled Trades</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                In-house engineering and drafting capabilities resolve clashes before site possession. Handpicked, vetted trades delivering defect-free commercial packages.
+              </p>
+            </div>
+
+            <div class="border border-slate-300 rounded-lg p-6 bg-white shadow-sm hover:border-slate-400 transition">
+              <div class="w-8 h-8 rounded bg-slate-900 text-white font-mono font-bold flex items-center justify-center text-xs mb-4">06</div>
+              <h3 class="font-bold text-slate-900 text-base mb-2">Early Contractor Involvement (ECI)</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Engaging upfront during schematic phases to audit designs, evaluate constructability, and unlock substantial CAPEX cost savings for principal contractors.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sector Capability Counter Matrix -->
+        <div class="bg-slate-100 border-y border-slate-300 py-16 px-6 lg:px-12">
+          <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+              <div>
+                <span class="badge-spec bg-slate-200 text-slate-700 px-2 py-0.5 rounded">Verified Past Performance</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">Queensland Commercial Track Record</h2>
+                <p class="text-sm text-slate-600">Over 50 major commercial packages successfully delivered statewide.</p>
+              </div>
+              <button onclick="switchTemplate('work')" class="text-xs font-mono font-bold text-blue-600 hover:text-blue-800 flex items-center">
+                Explore Full Verified Project Registry →
+              </button>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+              <div class="bg-white border border-slate-300 rounded-lg p-4 text-center">
+                <div class="text-3xl font-black text-slate-900">18+</div>
+                <div class="text-xs font-bold text-slate-700 mt-1">Retail & Supermarkets</div>
+                <div class="text-[11px] text-slate-500 mt-1">Coles, Woolies, Dan Murphy's</div>
+              </div>
+              <div class="bg-white border border-slate-300 rounded-lg p-4 text-center">
+                <div class="text-3xl font-black text-slate-900">8+</div>
+                <div class="text-xs font-bold text-slate-700 mt-1">Tertiary & Schools</div>
+                <div class="text-[11px] text-slate-500 mt-1">Bond Uni, State Schools</div>
+              </div>
+              <div class="bg-white border border-slate-300 rounded-lg p-4 text-center">
+                <div class="text-3xl font-black text-slate-900">5+</div>
+                <div class="text-xs font-bold text-slate-700 mt-1">Industrial & Logistics</div>
+                <div class="text-[11px] text-slate-500 mt-1">Lindsay Transport, Hastings</div>
+              </div>
+              <div class="bg-white border border-slate-300 rounded-lg p-4 text-center">
+                <div class="text-3xl font-black text-slate-900">6+</div>
+                <div class="text-xs font-bold text-slate-700 mt-1">Stadiums & Venues</div>
+                <div class="text-[11px] text-slate-500 mt-1">Eagle Farm, Suncorp</div>
+              </div>
+              <div class="bg-white border border-slate-300 rounded-lg p-4 text-center">
+                <div class="text-3xl font-black text-slate-900">7+</div>
+                <div class="text-xs font-bold text-slate-700 mt-1">Healthcare & Govt</div>
+                <div class="text-[11px] text-slate-500 mt-1">Redcliffe Hospital, QPS</div>
+              </div>
+              <div class="bg-white border border-slate-300 rounded-lg p-4 text-center">
+                <div class="text-3xl font-black text-slate-900">6+</div>
+                <div class="text-xs font-bold text-slate-700 mt-1">Multi-Residential</div>
+                <div class="text-[11px] text-slate-500 mt-1">Spectrum, Peak Apts</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Capability Statement Mid-Page Banner -->
+        <div class="bg-slate-900 text-white py-12 px-6 lg:px-12 text-center">
+          <div class="max-w-3xl mx-auto">
+            <h3 class="text-2xl font-bold mb-3">Vetting Subcontractors for Your Upcoming Tender?</h3>
+            <p class="text-xs text-slate-300 mb-6 max-w-xl mx-auto leading-relaxed">
+              Download our complete 2026 Commercial Capability Statement containing detailed project sheets, insurance certificates ($20M PL), WHS compliance manuals, and plant registers.
+            </p>
+            <button onclick="openModal('capModal')" class="bg-white hover:bg-slate-100 text-slate-900 font-bold px-6 py-3 rounded text-xs shadow-md">
+              Download Full Capability Statement [PDF]
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TEMPLATE 2: WHY ENGERGIZE (page-why-energize.php) -->
+      <section id="template-why" class="template-view hidden">
+        <div class="blueprint-grid border-b border-slate-300 py-12 px-6 lg:px-12 bg-white">
+          <div class="max-w-4xl mx-auto">
+            <span class="badge-spec bg-blue-50 text-blue-800 border border-blue-200 px-2 py-0.5 rounded">Capability & Governance</span>
+            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-2 mb-4">
+              The Working Director Advantage & Zero Safety Compromise
+            </h1>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Why Tier-1 head contractors choose Energize: Direct founder accountability on site, complete in-house design capabilities, and over two decades of unblemished statutory safety compliance across Queensland.
+            </p>
+          </div>
+        </div>
+
+        <div class="py-12 px-6 lg:px-12 max-w-5xl mx-auto">
+          <h2 class="text-xl font-bold text-slate-900 mb-6">Hands-On Working Director Philosophy</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            <div class="border border-slate-300 rounded-lg p-6 bg-white">
+              <div class="flex items-center space-x-3 mb-4">
+                <div class="placeholder-box w-12 h-12 rounded-full">PHOTO</div>
+                <div>
+                  <h3 class="font-bold text-slate-900 text-base">Dan Monti</h3>
+                  <div class="text-xs text-slate-500 font-mono">Managing Director / Projects</div>
+                </div>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Personally provides high-level strategic and technical backing to on-site foremen. Directly liaises with principal contractor project managers, enabling instantaneous engineering decisions without corporate delays.
+              </p>
+              <div class="text-[11px] font-mono text-slate-500">Focus: Major contracts, site operations, technical governance</div>
+            </div>
+
+            <div class="border border-slate-300 rounded-lg p-6 bg-white">
+              <div class="flex items-center space-x-3 mb-4">
+                <div class="placeholder-box w-12 h-12 rounded-full">PHOTO</div>
+                <div>
+                  <h3 class="font-bold text-slate-900 text-base">Jason Edwards</h3>
+                  <div class="text-xs text-slate-500 font-mono">Managing Director / Operations</div>
+                </div>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Oversees corporate governance, regulatory safety compliance, and contractual execution. Ensures every project is backed by comprehensive safety plans, insurance safeguards, and financial stability.
+              </p>
+              <div class="text-[11px] font-mono text-slate-500">Focus: Corporate compliance, business operations, safety systems</div>
+            </div>
+          </div>
+
+          <!-- Accreditations Grid -->
+          <div class="border-t border-slate-300 pt-10">
+            <h2 class="text-xl font-bold text-slate-900 mb-6">Licences, Accreditations & Insurance Safeguards</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div class="border border-slate-300 rounded p-4 bg-slate-50">
+                <div class="text-xs font-mono text-slate-500 uppercase">Contractor Licence</div>
+                <div class="font-bold text-slate-900 text-sm mt-1">Electrical Contractor # 70739</div>
+                <div class="text-[11px] text-slate-600 mt-1">Queensland Electrical Safety Office</div>
+              </div>
+              <div class="border border-slate-300 rounded p-4 bg-slate-50">
+                <div class="text-xs font-mono text-slate-500 uppercase">Industry Association</div>
+                <div class="font-bold text-slate-900 text-sm mt-1">Master Electricians Australia</div>
+                <div class="text-[11px] text-slate-600 mt-1">Accredited Commercial Member</div>
+              </div>
+              <div class="border border-slate-300 rounded p-4 bg-slate-50">
+                <div class="text-xs font-mono text-slate-500 uppercase">Safety Prequalification</div>
+                <div class="font-bold text-slate-900 text-sm mt-1">CM3 Prequalified Contractor</div>
+                <div class="text-[11px] text-slate-600 mt-1">Verified WHS Risk Management Systems</div>
+              </div>
+              <div class="border border-slate-300 rounded p-4 bg-slate-50">
+                <div class="text-xs font-mono text-slate-500 uppercase">Public Liability</div>
+                <div class="font-bold text-slate-900 text-sm mt-1">$20,000,000 Coverage</div>
+                <div class="text-[11px] text-slate-600 mt-1">Underwritten for major commercial works</div>
+              </div>
+              <div class="border border-slate-300 rounded p-4 bg-slate-50">
+                <div class="text-xs font-mono text-slate-500 uppercase">Workers Compensation</div>
+                <div class="font-bold text-slate-900 text-sm mt-1">WorkCover Queensland</div>
+                <div class="text-[11px] text-slate-600 mt-1">Current & fully compliant policy</div>
+              </div>
+              <div class="border border-slate-300 rounded p-4 bg-slate-50">
+                <div class="text-xs font-mono text-slate-500 uppercase">Safety Framework</div>
+                <div class="font-bold text-slate-900 text-sm mt-1">AS/NZS 4801 / ISO 45001</div>
+                <div class="text-[11px] text-slate-600 mt-1">Aligned safety management systems</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TEMPLATE 3: SERVICES DIRECTORY (archive-service.php) -->
+      <section id="template-services" class="template-view hidden">
+        <div class="blueprint-grid border-b border-slate-300 py-12 px-6 lg:px-12 bg-white">
+          <div class="max-w-4xl mx-auto">
+            <span class="badge-spec bg-blue-50 text-blue-800 border border-blue-200 px-2 py-0.5 rounded">Capabilities & Services</span>
+            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-2 mb-4">
+              Value-Driven Commercial Electrical Engineering & Compliance
+            </h1>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Every service is structured around your commercial risk and operational ROI—mitigating unplanned downtime, satisfying insurance underwriters, and delivering defect-free projects on time.
+            </p>
+          </div>
+        </div>
+
+        <div class="py-12 px-6 lg:px-12 max-w-6xl mx-auto">
+          <div class="mb-12">
+            <div class="flex items-center space-x-3 mb-6 pb-2 border-b border-slate-300">
+              <span class="badge-spec bg-slate-900 text-white px-2 py-0.5 rounded">Category A</span>
+              <h2 class="text-xl font-bold text-slate-900">Commercial Contracting & Infrastructure Projects</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="border border-slate-300 rounded-lg p-6 bg-white hover:border-slate-400 transition">
+                <h3 class="font-bold text-slate-900 text-base mb-2">Early Contractor Involvement (ECI) & Design and Construct (D&C)</h3>
+                <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                  <strong>Value:</strong> Eliminate design discrepancies, engineering clashes, and costly variations before breaking ground. In-house engineering generates measurable project-wide cost savings.
+                </p>
+                <button onclick="switchTemplate('service-detail')" class="text-xs font-bold text-blue-600 hover:text-blue-800">Explore D&C Capabilities →</button>
+              </div>
+
+              <div class="border border-slate-300 rounded-lg p-6 bg-white hover:border-slate-400 transition">
+                <h3 class="font-bold text-slate-900 text-base mb-2">High Voltage (HV) & Substation Integration</h3>
+                <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                  <strong>Value:</strong> Flawless live-environment changeovers with minimal planned downtime. Turnkey network liaison with Energex.
+                </p>
+                <button onclick="switchTemplate('service-detail')" class="text-xs font-bold text-blue-600 hover:text-blue-800">Explore HV Upgrades →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TEMPLATE 4: SERVICE DETAIL (single-service.php) -->
+      <section id="template-service-detail" class="template-view hidden">
+        <div class="blueprint-grid border-b border-slate-300 py-12 px-6 lg:px-12 bg-white">
+          <div class="max-w-4xl mx-auto">
+            <div class="text-xs font-mono text-slate-500 mb-2">Services > Statutory Safety & Compliance > Infrared Thermal Imaging</div>
+            <span class="badge-spec bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded">Predictive Asset Protection</span>
+            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-2 mb-3">
+              Infrared Thermal Imaging & Switchboard Fault Detection
+            </h1>
+            <p class="text-base text-slate-600 leading-relaxed mb-6">
+              Detect latent hot spots, high-resistance joints, and overloaded phases on live switchboards before catastrophic failure or electrical fires occur. Fulfill mandatory commercial property insurance underwriting requirements.
+            </p>
+            <div class="flex flex-wrap gap-3">
+              <button onclick="openModal('quoteModal')" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-5 py-2.5 rounded text-xs">
+                Request a Thermal Audit Quote
+              </button>
+              <button class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 font-semibold px-5 py-2.5 rounded text-xs">
+                Download Sample Thermal Report Layout
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="py-12 px-6 lg:px-12 max-w-5xl mx-auto">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 space-y-8">
+              <div>
+                <h2 class="text-lg font-bold text-slate-900 mb-3">Why Thermal Imaging is Essential for Asset Managers</h2>
+                <div class="space-y-3 text-xs text-slate-700 leading-relaxed">
+                  <div class="border-l-2 border-blue-600 pl-3">
+                    <strong>Zero Operational Downtime:</strong> Conducted completely live during peak operating hours under normal load—meaning zero interruption to your tenants or plant operations.
+                  </div>
+                  <div class="border-l-2 border-blue-600 pl-3">
+                    <strong>Mandatory Insurer Compliance:</strong> Underwriters increasingly mandate annual thermographic audits as a condition of commercial building and business interruption coverage.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Process Steps -->
+              <div class="border-t border-slate-200 pt-6">
+                <h3 class="text-base font-bold text-slate-900 mb-4">Our Thermographic Inspection Process</h3>
+                <div class="space-y-3">
+                  <div class="flex items-start space-x-3 bg-slate-50 p-3 rounded border border-slate-200">
+                    <span class="font-mono font-bold text-xs bg-slate-900 text-white px-2 py-0.5 rounded">01</span>
+                    <div class="text-xs">
+                      <div class="font-bold text-slate-900">Live Radiometric Scan</div>
+                      <div class="text-slate-600">High-resolution infrared scanning of MSBs, distribution boards, busbars, and contactors under load.</div>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3 bg-slate-50 p-3 rounded border border-slate-200">
+                    <span class="font-mono font-bold text-xs bg-slate-900 text-white px-2 py-0.5 rounded">02</span>
+                    <div class="text-xs">
+                      <div class="font-bold text-slate-900">Delta-T Anomaly Evaluation</div>
+                      <div class="text-slate-600">Measuring heat rises above ambient and phase baseline to diagnose loose terminations or phase imbalance.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+              <div class="border border-slate-300 rounded-lg p-5 bg-slate-50 text-xs">
+                <div class="font-mono uppercase text-slate-500 mb-2 font-bold">Standards & Governance</div>
+                <div class="space-y-1.5 text-slate-700">
+                  <div>• AS ISO 18434-1 Thermography</div>
+                  <div>• QLD Electrical Safety Act 2002</div>
+                  <div>• Insurance Underwriter Compliant</div>
+                </div>
+              </div>
+              <div class="border border-slate-300 rounded-lg p-5 bg-white text-center">
+                <h4 class="font-bold text-slate-900 text-sm mb-2">Book Your Facility Audit</h4>
+                <p class="text-xs text-slate-600 mb-4">Direct quote reviewed by Director Dan Monti.</p>
+                <button onclick="openModal('quoteModal')" class="w-full bg-slate-900 text-white font-bold py-2.5 rounded text-xs">Request Quote for this Service</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TEMPLATE 5: WORK PORTFOLIO LIST (archive-project.php) -->
+      <section id="template-work" class="template-view hidden">
+        <div class="blueprint-grid border-b border-slate-300 py-12 px-6 lg:px-12 bg-white">
+          <div class="max-w-4xl mx-auto">
+            <span class="badge-spec bg-blue-50 text-blue-800 border border-blue-200 px-2 py-0.5 rounded">Verified Track Record</span>
+            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-2 mb-3">
+              Commercial Capability Matrix & Project Register
+            </h1>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Demonstrated scale across Queensland: 50+ major commercial, retail, educational, and industrial projects delivered with direct working director oversight and zero safety compromise.
+            </p>
+          </div>
+        </div>
+
+        <div class="py-10 px-6 lg:px-12 max-w-6xl mx-auto">
+          <!-- Interactive Sector Filter Tabs -->
+          <div class="flex flex-wrap items-center gap-2 mb-8 border-b border-slate-300 pb-4">
+            <button onclick="filterPortfolio('all')" id="filter-all" class="portfolio-filter-btn px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-slate-900 text-white">All Sectors (50+)</button>
+            <button onclick="filterPortfolio('retail')" id="filter-retail" class="portfolio-filter-btn px-3 py-1.5 rounded-full text-xs font-mono font-medium bg-slate-100 text-slate-700 hover:bg-slate-200">Retail & Supermarkets (18)</button>
+            <button onclick="filterPortfolio('education')" id="filter-education" class="portfolio-filter-btn px-3 py-1.5 rounded-full text-xs font-mono font-medium bg-slate-100 text-slate-700 hover:bg-slate-200">Education (8)</button>
+            <button onclick="filterPortfolio('industrial')" id="filter-industrial" class="portfolio-filter-btn px-3 py-1.5 rounded-full text-xs font-mono font-medium bg-slate-100 text-slate-700 hover:bg-slate-200">Industrial & Logistics (5)</button>
+            <button onclick="filterPortfolio('venues')" id="filter-venues" class="portfolio-filter-btn px-3 py-1.5 rounded-full text-xs font-mono font-medium bg-slate-100 text-slate-700 hover:bg-slate-200">Stadiums & Venues (6)</button>
+            <button onclick="filterPortfolio('health')" id="filter-health" class="portfolio-filter-btn px-3 py-1.5 rounded-full text-xs font-mono font-medium bg-slate-100 text-slate-700 hover:bg-slate-200">Healthcare & Govt (7)</button>
+            <button onclick="filterPortfolio('multires')" id="filter-multires" class="portfolio-filter-btn px-3 py-1.5 rounded-full text-xs font-mono font-medium bg-slate-100 text-slate-700 hover:bg-slate-200">Multi-Residential (6)</button>
+          </div>
+
+          <!-- Featured Marquee Case Studies -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="border border-slate-300 rounded-lg overflow-hidden bg-white hover:border-slate-400 transition cursor-pointer" onclick="switchTemplate('work-detail')">
+              <div class="placeholder-box h-40 border-0 border-b border-slate-200 bg-slate-100">
+                [PHOTO: EAGLE FARM HV SUBSTATION]
+              </div>
+              <div class="p-5">
+                <div class="flex justify-between items-center text-[10px] font-mono text-slate-500 mb-1">
+                  <span>Brisbane Racing Club</span>
+                  <span>Nov 2018</span>
+                </div>
+                <h3 class="font-bold text-slate-900 text-sm mb-2">Eagle Farm Racecourse HV Upgrade</h3>
+                <p class="text-xs text-slate-600 mb-3">Major high-voltage network upgrade, main switchboard installation, and sub-mains.</p>
+                <div class="text-xs font-bold text-blue-600">View Detailed Case Study →</div>
+              </div>
+            </div>
+
+            <div class="border border-slate-300 rounded-lg overflow-hidden bg-white hover:border-slate-400 transition cursor-pointer" onclick="switchTemplate('work-detail')">
+              <div class="placeholder-box h-40 border-0 border-b border-slate-200 bg-slate-100">
+                [PHOTO: COLES PACIFIC PINES]
+              </div>
+              <div class="p-5">
+                <div class="flex justify-between items-center text-[10px] font-mono text-slate-500 mb-1">
+                  <span>ADCO / Coles Group</span>
+                  <span>Nov 2016</span>
+                </div>
+                <h3 class="font-bold text-slate-900 text-sm mb-2">Coles Pacific Pines Fast-Track Handover</h3>
+                <p class="text-xs text-slate-600 mb-3">Full commercial supermarket fitout completed defect-free under compressed timelines.</p>
+                <div class="text-xs font-bold text-blue-600">View Detailed Case Study →</div>
+              </div>
+            </div>
+
+            <div class="border border-slate-300 rounded-lg overflow-hidden bg-white hover:border-slate-400 transition cursor-pointer" onclick="switchTemplate('work-detail')">
+              <div class="placeholder-box h-40 border-0 border-b border-slate-200 bg-slate-100">
+                [PHOTO: VIC PARK ENERGEX CUT]
+              </div>
+              <div class="p-5">
+                <div class="flex justify-between items-center text-[10px] font-mono text-slate-500 mb-1">
+                  <span>Ranbury Infrastructure</span>
+                  <span>Jan 2016</span>
+                </div>
+                <h3 class="font-bold text-slate-900 text-sm mb-2">Victoria Park Major Network Shutdown</h3>
+                <p class="text-xs text-slate-600 mb-3">High-risk electrical & comms shutdown with zero inner-city network disruptions.</p>
+                <div class="text-xs font-bold text-blue-600">View Detailed Case Study →</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Verified Project Registry Table (Tier 3) -->
+          <div class="border border-slate-300 rounded-lg overflow-hidden bg-white">
+            <div class="bg-slate-100 px-6 py-4 border-b border-slate-300 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm">Verified Commercial Project Registry</h3>
+                <p class="text-xs text-slate-500 font-mono">Complete historical log of delivered works (2007–2026)</p>
+              </div>
+              <div class="text-xs font-mono text-slate-600">Showing <span id="project-count-display">50+</span> Verified Deliverables</div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 font-mono uppercase">
+                  <tr>
+                    <th class="py-2.5 px-4">Year</th>
+                    <th class="py-2.5 px-4">Head Contractor / Client</th>
+                    <th class="py-2.5 px-4">Project Name & Location</th>
+                    <th class="py-2.5 px-4">Sector</th>
+                    <th class="py-2.5 px-4">Scope of Works</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 text-slate-700" id="project-table-body">
+                  <tr>
+                    <td class="py-2.5 px-4 font-mono font-bold">2018</td>
+                    <td class="py-2.5 px-4 font-semibold text-slate-900">Brisbane Racing Club</td>
+                    <td class="py-2.5 px-4">Eagle Farm Racecourse, Ascot</td>
+                    <td class="py-2.5 px-4"><span class="badge-spec bg-purple-100 text-purple-900 px-1.5 py-0.5 rounded">Venues</span></td>
+                    <td class="py-2.5 px-4 text-slate-600">Major High Voltage (HV) Upgrade, Sub-Mains, Site MSB</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 px-4 font-mono font-bold">2018</td>
+                    <td class="py-2.5 px-4 font-semibold text-slate-900">Mainbrace Constructions</td>
+                    <td class="py-2.5 px-4">Marsden Park Shopping Centre</td>
+                    <td class="py-2.5 px-4"><span class="badge-spec bg-blue-100 text-blue-900 px-1.5 py-0.5 rounded">Retail</span></td>
+                    <td class="py-2.5 px-4 text-slate-600">Commercial Shopping Centre Refurbishment</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 px-4 font-mono font-bold">2018</td>
+                    <td class="py-2.5 px-4 font-semibold text-slate-900">Mainbrace Constructions</td>
+                    <td class="py-2.5 px-4">Albany Creek Shopping Centre</td>
+                    <td class="py-2.5 px-4"><span class="badge-spec bg-blue-100 text-blue-900 px-1.5 py-0.5 rounded">Retail</span></td>
+                    <td class="py-2.5 px-4 text-slate-600">Commercial Retail Refurbishment & Tenancy Fitouts</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 px-4 font-mono font-bold">2018</td>
+                    <td class="py-2.5 px-4 font-semibold text-slate-900">ADCO Constructions</td>
+                    <td class="py-2.5 px-4">QPS Tactical Response Unit</td>
+                    <td class="py-2.5 px-4"><span class="badge-spec bg-emerald-100 text-emerald-900 px-1.5 py-0.5 rounded">Govt</span></td>
+                    <td class="py-2.5 px-4 text-slate-600">Queensland Police Service High-Security Facility</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 px-4 font-mono font-bold">2017</td>
+                    <td class="py-2.5 px-4 font-semibold text-slate-900">ADCO Constructions</td>
+                    <td class="py-2.5 px-4">Bond University Business Building</td>
+                    <td class="py-2.5 px-4"><span class="badge-spec bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded">Education</span></td>
+                    <td class="py-2.5 px-4 text-slate-600">Tertiary Education Facility & Advanced Learning Hub</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 px-4 font-mono font-bold">2017</td>
+                    <td class="py-2.5 px-4 font-semibold text-slate-900">Broad Constructions</td>
+                    <td class="py-2.5 px-4">Belmont Shooting Complex</td>
+                    <td class="py-2.5 px-4"><span class="badge-spec bg-purple-100 text-purple-900 px-1.5 py-0.5 rounded">Venues</span></td>
+                    <td class="py-2.5 px-4 text-slate-600">Major Sporting Infrastructure & Shooting Range Complex</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 px-4 font-mono font-bold">2016</td>
+                    <td class="py-2.5 px-4 font-semibold text-slate-900">Rohrig</td>
+                    <td class="py-2.5 px-4">Lindsay Transport DC, Acacia Ridge</td>
+                    <td class="py-2.5 px-4"><span class="badge-spec bg-orange-100 text-orange-900 px-1.5 py-0.5 rounded">Logistics</span></td>
+                    <td class="py-2.5 px-4 text-slate-600">Cold Storage & Heavy Transport Logistics Facility</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 px-4 font-mono font-bold">2016</td>
+                    <td class="py-2.5 px-4 font-semibold text-slate-900">Badge Constructions</td>
+                    <td class="py-2.5 px-4">Spectrum Apartments, Lutwyche</td>
+                    <td class="py-2.5 px-4"><span class="badge-spec bg-indigo-100 text-indigo-900 px-1.5 py-0.5 rounded">Multi-Res</span></td>
+                    <td class="py-2.5 px-4 text-slate-600">Multi-Residential Medium-Density Apartment Complex</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div class="bg-slate-50 p-4 border-t border-slate-200 text-center text-xs text-slate-500">
+              Complete project archive contains 50+ delivered Queensland commercial contracts.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TEMPLATE 6: WORK DETAIL / CASE STUDY (single-project.php) -->
+      <section id="template-work-detail" class="template-view hidden">
+        <div class="blueprint-grid border-b border-slate-300 py-12 px-6 lg:px-12 bg-white">
+          <div class="max-w-4xl mx-auto">
+            <div class="text-xs font-mono text-slate-500 mb-2">Work Portfolio > Stadiums & Venues > Eagle Farm Racecourse</div>
+            <span class="badge-spec bg-purple-100 text-purple-900 px-2 py-0.5 rounded">Featured Commercial Project</span>
+            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-2 mb-3">
+              Eagle Farm Racecourse – High Voltage & Site MSB Upgrade
+            </h1>
+            <div class="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-600">
+              <span>Client: <strong>Brisbane Racing Club</strong></span>
+              <span>•</span>
+              <span>Engineering Consultant: <strong>Wood & Grieve Engineers</strong></span>
+              <span>•</span>
+              <span>Location: <strong>Ascot, Brisbane</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="py-12 px-6 lg:px-12 max-w-5xl mx-auto">
+          <div class="placeholder-box h-64 rounded-xl mb-8">
+            [PRIMARY PHOTOGRAPHY: EAGLE FARM SWITCHROOM & SUBSTATION INSTALLATION]
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 space-y-8">
+              <div>
+                <h2 class="text-lg font-bold text-slate-900 mb-2">The Challenge & Operational Context</h2>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Upgrading electrical infrastructure across a premier racing and entertainment venue while keeping track facilities fully operational. Zero tolerance for unplanned outages that could compromise racing broadcasts or public safety.
+                </p>
+              </div>
+
+              <div class="border-t border-slate-200 pt-6">
+                <h2 class="text-lg font-bold text-slate-900 mb-2">The Energize Turnkey Solution</h2>
+                <ul class="text-xs text-slate-600 space-y-2">
+                  <li class="flex items-start"><span class="text-blue-600 mr-2">✔</span>Staged live-changeovers coordinated out-of-hours with Energex network authority.</li>
+                  <li class="flex items-start"><span class="text-blue-600 mr-2">✔</span>Supply and installation of main switchboard (MSB), sub-mains, and cable reticulation.</li>
+                  <li class="flex items-start"><span class="text-blue-600 mr-2">✔</span>Director-supervised execution ensuring zero disruption to track operations.</li>
+                </ul>
+              </div>
+
+              <div class="bg-slate-50 border border-slate-300 rounded-lg p-5">
+                <div class="text-[10px] font-mono text-slate-500 uppercase mb-1">Consulting Engineer Letter of Commendation</div>
+                <p class="text-xs text-slate-800 italic mb-3">
+                  "We would like to express our appreciation to Energize for their performance on the Eagle Farm Racecourse Electrical Upgrade Project."
+                </p>
+                <div class="text-xs font-bold text-slate-900">Michael Bourke — Wood & Grieve Engineers</div>
+              </div>
+            </div>
+
+            <!-- Project Specs Sidebar -->
+            <div class="border border-slate-300 rounded-lg p-6 bg-white space-y-4 text-xs">
+              <h3 class="font-bold text-slate-900 text-sm border-b border-slate-200 pb-2">Project Specifications</h3>
+              <div><strong>Sector:</strong> Stadiums, Venues & Entertainment</div>
+              <div><strong>Completion Date:</strong> November 2018</div>
+              <div><strong>Key Disciplines:</strong> HV Upgrades, MSBs, Civil Conduits, Commissioning</div>
+              <div><strong>Safety Record:</strong> Zero incidents / Zero downtime</div>
+              <div class="pt-4 border-t border-slate-200">
+                <button onclick="openModal('quoteModal')" class="w-full bg-slate-900 text-white font-bold py-2 rounded text-xs">
+                  Request a Quote for Similar Works
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TEMPLATE 7: CONTACT (page-contact.php) -->
+      <section id="template-contact" class="template-view hidden">
+        <div class="blueprint-grid border-b border-slate-300 py-12 px-6 lg:px-12 bg-white">
+          <div class="max-w-4xl mx-auto">
+            <span class="badge-spec bg-blue-50 text-blue-800 border border-blue-200 px-2 py-0.5 rounded">Direct Contact</span>
+            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-2 mb-3">
+              Headquartered in Brisbane. Delivering Statewide.
+            </h1>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Direct access to our leadership team. No gatekeepers, no automated call loops.
+            </p>
+          </div>
+        </div>
+
+        <div class="py-12 px-6 lg:px-12 max-w-6xl mx-auto">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+            <div class="border border-slate-300 rounded p-4 bg-white">
+              <div class="text-[10px] font-mono text-slate-500 uppercase">Head Office Switchboard</div>
+              <div class="font-bold text-slate-900 text-base mt-1">(07) 3865 6500</div>
+              <div class="text-xs text-slate-500 mt-1">Mon–Fri: 9:00 AM – 5:00 PM AEST</div>
+            </div>
+            <div class="border border-slate-300 rounded p-4 bg-white">
+              <div class="text-[10px] font-mono text-slate-500 uppercase">Estimating & Tenders</div>
+              <div class="font-bold text-slate-900 text-base mt-1">estimating@energizeindustries.com</div>
+              <div class="text-xs text-slate-500 mt-1">4-hour acknowledgement SLA</div>
+            </div>
+            <div class="border border-slate-300 rounded p-4 bg-white">
+              <div class="text-[10px] font-mono text-slate-500 uppercase">Managing Director (Dan Monti)</div>
+              <div class="font-bold text-slate-900 text-base mt-1">0413 807 060</div>
+              <div class="text-xs text-slate-500 mt-1">Direct project escalation</div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="border border-slate-300 rounded-lg p-6 bg-white shadow-sm">
+              <h3 class="font-bold text-slate-900 text-base mb-4">Send a Direct Message</h3>
+              <form class="space-y-4 text-xs" onsubmit="event.preventDefault(); alert('Form submitted in prototype mode.');">
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Full Name *</label>
+                    <input type="text" placeholder="Your name" class="w-full border border-slate-300 rounded px-3 py-2">
+                  </div>
+                  <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Company *</label>
+                    <input type="text" placeholder="Company / Builder" class="w-full border border-slate-300 rounded px-3 py-2">
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Work Email *</label>
+                    <input type="email" placeholder="email@company.com" class="w-full border border-slate-300 rounded px-3 py-2">
+                  </div>
+                  <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Phone *</label>
+                    <input type="tel" placeholder="0400 000 000" class="w-full border border-slate-300 rounded px-3 py-2">
+                  </div>
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Enquiry Nature</label>
+                  <select class="w-full border border-slate-300 rounded px-3 py-2 bg-white">
+                    <option>Commercial Tender / Pricing</option>
+                    <option>Statutory Compliance Testing (Thermal, RCD, Lighting)</option>
+                    <option>Capability Statement Request</option>
+                    <option>General Corporate Inquiry</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Message</label>
+                  <textarea rows="4" placeholder="Outline your project scope or facility requirements..." class="w-full border border-slate-300 rounded px-3 py-2"></textarea>
+                </div>
+                <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 px-6 rounded text-xs">
+                  Send Inquiry
+                </button>
+              </form>
+            </div>
+
+            <div class="space-y-6">
+              <div class="border border-slate-300 rounded-lg p-6 bg-white">
+                <h3 class="font-bold text-slate-900 text-base mb-3">Corporate Headquarters</h3>
+                <div class="text-xs text-slate-600 space-y-1 mb-4">
+                  <div><strong>Address:</strong> Unit 2 / 400 Newman Road, Geebung QLD 4034</div>
+                  <div><strong>Postal:</strong> PO Box 179, Geebung QLD 4034</div>
+                  <div><strong>ABN:</strong> 39 136 854 754</div>
+                  <div><strong>Electrical Lic:</strong> 70739 (Queensland)</div>
+                </div>
+                <div class="placeholder-box h-40 rounded">
+                  [INTERACTIVE MAP / OFFICE LOCATION PREVIEW]
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GLOBAL FOOTER WIREFRAME -->
+      <footer class="bg-slate-900 text-slate-400 text-xs border-t border-slate-800 py-12 px-6 lg:px-12">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div>
+            <div class="font-black text-white text-base mb-1">ENERGIZE INDUSTRIES</div>
+            <div class="text-[11px] font-mono text-slate-500 mb-3">Energize Electrical Safety Management Pty Ltd</div>
+            <p class="text-slate-400 leading-relaxed text-[11px]">
+              Queensland commercial electrical contracting, in-house D&C engineering, and statutory compliance with direct director oversight.
+            </p>
+          </div>
+          <div>
+            <div class="font-bold text-white text-xs mb-3 font-mono uppercase">Capabilities</div>
+            <ul class="space-y-1.5 text-[11px]">
+              <li>Commercial Construction</li>
+              <li>High Voltage Upgrades</li>
+              <li>Thermal Imaging Scanning</li>
+              <li>Emergency Lighting AS 2293</li>
+              <li>RCD Safety Switch Testing</li>
+            </ul>
+          </div>
+          <div>
+            <div class="font-bold text-white text-xs mb-3 font-mono uppercase">Credentials</div>
+            <ul class="space-y-1.5 text-[11px]">
+              <li>Electrical Contractor Lic # 70739</li>
+              <li>ABN: 39 136 854 754</li>
+              <li>Master Electricians Member</li>
+              <li>CM3 Prequalified Contractor</li>
+              <li>$20M Public Liability Insurance</li>
+            </ul>
+          </div>
+          <div>
+            <div class="font-bold text-white text-xs mb-3 font-mono uppercase">Brisbane HQ</div>
+            <div class="text-[11px] space-y-1">
+              <div>Unit 2 / 400 Newman Road</div>
+              <div>Geebung QLD 4034</div>
+              <div class="pt-2 font-mono text-white">Ph: (07) 3865 6500</div>
+              <div class="font-mono text-slate-400">estimating@energizeindustries.com</div>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  </main>
+
+  <!-- MODAL 1: REQUEST A QUOTE -->
+  <div id="quoteModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-xl shadow-2xl border border-slate-300 max-w-xl w-full p-6 my-8">
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <span class="badge-spec bg-blue-100 text-blue-900 px-2 py-0.5 rounded">High-Intent Funnel</span>
+          <h3 class="text-xl font-bold text-slate-900 mt-1">Request a Commercial Quote / Submit Tender</h3>
+          <p class="text-xs text-slate-500">Reviewed directly by Dan Monti & Jason Edwards • 4-hr acknowledgement SLA</p>
+        </div>
+        <button onclick="closeModal('quoteModal')" class="text-slate-400 hover:text-slate-700 text-xl font-mono">✕</button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-lg mb-4 text-xs font-semibold text-center">
+        <button onclick="setQuoteTrack('tender')" id="btn-track-tender" class="py-2 rounded bg-slate-900 text-white shadow-sm">Commercial Construction Tender</button>
+        <button onclick="setQuoteTrack('compliance')" id="btn-track-compliance" class="py-2 rounded text-slate-600 hover:text-slate-900">Facility Safety & Audits</button>
+      </div>
+
+      <form class="space-y-3 text-xs" onsubmit="event.preventDefault(); alert('Tender package received in prototype mode.'); closeModal('quoteModal');">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Your Name *</label>
+            <input type="text" placeholder="Estimator / PM Name" class="w-full border border-slate-300 rounded px-3 py-2" required>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Company / Builder *</label>
+            <input type="text" placeholder="Head Contractor / Developer" class="w-full border border-slate-300 rounded px-3 py-2" required>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Work Email *</label>
+            <input type="email" placeholder="name@builder.com" class="w-full border border-slate-300 rounded px-3 py-2" required>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Direct Phone *</label>
+            <input type="tel" placeholder="0400 000 000" class="w-full border border-slate-300 rounded px-3 py-2" required>
+          </div>
+        </div>
+
+        <div id="tender-specific-fields">
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Project Name & Location</label>
+              <input type="text" placeholder="e.g. Retail Complex, North Lakes" class="w-full border border-slate-300 rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Tender Submission Deadline</label>
+              <input type="date" class="w-full border border-slate-300 rounded px-3 py-2">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Upload Tender Documents / Drawings (PDF, DWG, ZIP up to 50MB)</label>
+            <div class="placeholder-box h-24 rounded border-dashed border-2 border-slate-300 bg-slate-50 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-100">
+              <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+              <span class="text-[11px] font-mono text-slate-600">DRAG & DROP DRAWINGS / SPECIFICATIONS HERE</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-200 flex items-center justify-between">
+          <div class="text-[10px] font-mono text-slate-500">
+            Licence: <strong>#70739</strong> • Master Electricians
+          </div>
+          <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 px-6 rounded text-xs shadow-md">
+            Submit Tender Package
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: DOWNLOAD CAPABILITY STATEMENT -->
+  <div id="capModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl border border-slate-300 max-w-md w-full p-6">
+      <div class="flex justify-between items-start mb-3">
+        <div>
+          <span class="badge-spec bg-amber-100 text-amber-900 px-2 py-0.5 rounded">Lead Magnet Dossier</span>
+          <h3 class="text-xl font-bold text-slate-900 mt-1">Download Capability Statement</h3>
+          <p class="text-xs text-slate-500">2026 Commercial Contracting & Safety Dossier [PDF]</p>
+        </div>
+        <button onclick="closeModal('capModal')" class="text-slate-400 hover:text-slate-700 text-xl font-mono">✕</button>
+      </div>
+
+      <div class="bg-slate-50 p-3 rounded border border-slate-200 text-xs text-slate-600 mb-4 space-y-1">
+        <div>• <strong>Complete Project Matrix:</strong> Over 50 commercial deliverables</div>
+        <div>• <strong>Insurances & Licences:</strong> $20M Public Liability confirmation</div>
+        <div>• <strong>WHS Systems:</strong> AS/NZS 4801 & ISO 45001 alignment</div>
+      </div>
+
+      <form class="space-y-3 text-xs" onsubmit="event.preventDefault(); alert('Capability Statement PDF download initiated!'); closeModal('capModal');">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Full Name *</label>
+          <input type="text" placeholder="Your name" class="w-full border border-slate-300 rounded px-3 py-2" required>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Work Email Address *</label>
+          <input type="email" placeholder="name@company.com" class="w-full border border-slate-300 rounded px-3 py-2" required>
+          <p class="text-[10px] text-slate-400 mt-0.5">Instant browser download + copy dispatched to email.</p>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Company / Organization *</label>
+          <input type="text" placeholder="Builder / Developer / Facility" class="w-full border border-slate-300 rounded px-3 py-2" required>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Your Role</label>
+          <select class="w-full border border-slate-300 rounded px-3 py-2 bg-white">
+            <option>Head Contractor Estimator</option>
+            <option>Project Manager / Contract Admin</option>
+            <option>Commercial Facility Manager</option>
+            <option>Property Developer / Consultant</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded text-xs shadow-md mt-2">
+          Instant Download 2026 Capability Statement [PDF]
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FLOATING LIVE VISUAL EDITOR PALETTE -->
+  <div id="editor-dock" class="fixed bottom-4 right-4 z-50 bg-slate-900/95 backdrop-blur border border-slate-700 shadow-2xl rounded-xl p-4 text-white max-w-sm w-full hidden text-xs">
+    <div class="flex items-center justify-between border-b border-slate-700 pb-2 mb-3">
+      <div class="flex items-center space-x-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="font-mono font-bold text-slate-100">VISUAL EDITOR ACTIVE</span>
+      </div>
+      <button onclick="toggleLiveEditor()" class="text-slate-400 hover:text-white font-mono text-sm">✕</button>
+    </div>
+
+    <div class="space-y-3">
+      <div>
+        <div class="text-[10px] font-mono text-slate-400 uppercase mb-1">Active Target</div>
+        <div id="editor-target-label" class="font-mono bg-slate-800 px-2 py-1 rounded text-amber-300 truncate">Click any text or card to edit</div>
+      </div>
+
+      <!-- Text Styling -->
+      <div>
+        <div class="text-[10px] font-mono text-slate-400 uppercase mb-1">Text Scale</div>
+        <div class="grid grid-cols-4 gap-1 text-center font-mono">
+          <button onclick="applyStyle('textSize', 'sm')" class="bg-slate-800 hover:bg-slate-700 py-1 rounded">Small</button>
+          <button onclick="applyStyle('textSize', 'base')" class="bg-slate-800 hover:bg-slate-700 py-1 rounded">Base</button>
+          <button onclick="applyStyle('textSize', 'lg')" class="bg-slate-800 hover:bg-slate-700 py-1 rounded">Large</button>
+          <button onclick="applyStyle('textSize', 'xl')" class="bg-slate-800 hover:bg-slate-700 py-1 rounded">XL</button>
+        </div>
+      </div>
+
+      <!-- Spacing / Padding -->
+      <div>
+        <div class="text-[10px] font-mono text-slate-400 uppercase mb-1">Container Padding</div>
+        <div class="grid grid-cols-3 gap-1 text-center font-mono">
+          <button onclick="applyStyle('padding', 'tight')" class="bg-slate-800 hover:bg-slate-700 py-1 rounded">Compact</button>
+          <button onclick="applyStyle('padding', 'normal')" class="bg-slate-800 hover:bg-slate-700 py-1 rounded">Normal</button>
+          <button onclick="applyStyle('padding', 'roomy')" class="bg-slate-800 hover:bg-slate-700 py-1 rounded">Roomy</button>
+        </div>
+      </div>
+
+      <!-- Reordering / Hierarchy -->
+      <div>
+        <div class="text-[10px] font-mono text-slate-400 uppercase mb-1">Section Arrangement</div>
+        <div class="grid grid-cols-3 gap-1 text-center font-mono">
+          <button onclick="moveActiveElement('up')" class="bg-slate-800 hover:bg-slate-700 py-1 rounded flex items-center justify-center"><span class="mr-1">▲</span> Up</button>
+          <button onclick="moveActiveElement('down')" class="bg-slate-800 hover:bg-slate-700 py-1 rounded flex items-center justify-center"><span class="mr-1">▼</span> Down</button>
+          <button onclick="toggleHideActiveElement()" class="bg-slate-800 hover:bg-slate-700 py-1 rounded">👁 Hide</button>
+        </div>
+      </div>
+
+      <!-- Save & Export Tools -->
+      <div class="pt-2 border-t border-slate-700 grid grid-cols-2 gap-2">
+        <button onclick="saveLocalEdits()" class="bg-blue-600 hover:bg-blue-500 font-bold py-1.5 rounded text-center text-white flex items-center justify-center">
+          💾 Save (Local)
+        </button>
+        <button onclick="exportUpdatedHTML()" class="bg-emerald-600 hover:bg-emerald-500 font-bold py-1.5 rounded text-center text-white flex items-center justify-center">
+          ⬇️ Export HTML
+        </button>
+      </div>
+      <button onclick="resetDefaultEdits()" class="w-full text-[11px] text-slate-400 hover:text-rose-400 py-1 text-center font-mono">
+        🔄 Reset to Default Template
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Global Navigation & Control State
+    let isEditorActive = false;
+    let activeElement = null;
+
+    const templates = ['home', 'why', 'services', 'service-detail', 'work', 'work-detail', 'contact'];
+    const wpLabels = {
+      'home': 'front-page.php',
+      'why': 'page-why-energize.php',
+      'services': 'archive-service.php',
+      'service-detail': 'single-service.php',
+      'work': 'archive-project.php',
+      'work-detail': 'single-project.php',
+      'contact': 'page-contact.php'
+    };
+
+    function switchTemplate(target) {
+      templates.forEach(t => {
+        const el = document.getElementById('template-' + t);
+        const btn = document.getElementById('btn-' + t);
+        if (t === target) {
+          if (el) el.classList.remove('hidden');
+          if (btn) {
+            btn.classList.remove('bg-slate-800', 'text-slate-300');
+            btn.classList.add('bg-blue-600', 'text-white');
+          }
+        } else {
+          if (el) el.classList.add('hidden');
+          if (btn) {
+            btn.classList.remove('bg-blue-600', 'text-white');
+            btn.classList.add('bg-slate-800', 'text-slate-300');
+          }
+        }
+      });
+      const labelEl = document.getElementById('wp-template-label');
+      if (labelEl) labelEl.innerText = wpLabels[target] || 'template.php';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setViewport(width) {
+      const frame = document.getElementById('viewport-frame');
+      if (!frame) return;
+      frame.style.maxWidth = width;
+      ['vp-full', 'vp-tab', 'vp-mob'].forEach(id => {
+        const b = document.getElementById(id);
+        if (b) {
+          b.classList.remove('bg-slate-700', 'text-white');
+          b.classList.add('text-slate-400');
+        }
+      });
+      const activeBtn = width === '100%' ? document.getElementById('vp-full') :
+                        width === '1024px' ? document.getElementById('vp-tab') :
+                        document.getElementById('vp-mob');
+      if (activeBtn) {
+        activeBtn.classList.add('bg-slate-700', 'text-white');
+        activeBtn.classList.remove('text-slate-400');
+      }
+    }
+
+    function openModal(id) {
+      if (isEditorActive) return;
+      const m = document.getElementById(id);
+      if (m) m.classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.classList.add('hidden');
+    }
+
+    function setQuoteTrack(track) {
+      const tenderBtn = document.getElementById('btn-track-tender');
+      const compBtn = document.getElementById('btn-track-compliance');
+      const tenderFields = document.getElementById('tender-specific-fields');
+      if (track === 'tender') {
+        if (tenderBtn) tenderBtn.className = 'py-2 rounded bg-slate-900 text-white shadow-sm';
+        if (compBtn) compBtn.className = 'py-2 rounded text-slate-600 hover:text-slate-900';
+        if (tenderFields) tenderFields.classList.remove('hidden');
+      } else {
+        if (compBtn) compBtn.className = 'py-2 rounded bg-slate-900 text-white shadow-sm';
+        if (tenderBtn) tenderBtn.className = 'py-2 rounded text-slate-600 hover:text-slate-900';
+        if (tenderFields) tenderFields.classList.add('hidden');
+      }
+    }
+
+    function filterPortfolio(sector) {
+      const btns = document.querySelectorAll('.portfolio-filter-btn');
+      btns.forEach(b => {
+        b.className = 'portfolio-filter-btn px-3 py-1.5 rounded-full text-xs font-mono font-medium bg-slate-100 text-slate-700 hover:bg-slate-200';
+      });
+      const activeBtn = document.getElementById('filter-' + sector);
+      if (activeBtn) {
+        activeBtn.className = 'portfolio-filter-btn px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-slate-900 text-white';
+      }
+      const countDisplay = document.getElementById('project-count-display');
+      if (countDisplay) {
+        if (sector === 'all') countDisplay.innerText = '50+';
+        if (sector === 'retail') countDisplay.innerText = '18';
+        if (sector === 'education') countDisplay.innerText = '8';
+        if (sector === 'industrial') countDisplay.innerText = '5';
+        if (sector === 'venues') countDisplay.innerText = '6';
+        if (sector === 'health') countDisplay.innerText = '7';
+        if (sector === 'multires') countDisplay.innerText = '6';
+      }
+    }
+
+    // =========================================================================
+    // LIVE VISUAL & POINT-AND-CLICK EDITOR ENGINE
+    // =========================================================================
+    function toggleLiveEditor() {
+      isEditorActive = !isEditorActive;
+      const dock = document.getElementById('editor-dock');
+      const toggleBtn = document.getElementById('btn-toggle-editor');
+      const frame = document.getElementById('viewport-frame');
+
+      if (isEditorActive) {
+        document.body.classList.add('editor-active');
+        document.designMode = 'on';
+        if (frame) {
+          frame.setAttribute('contenteditable', 'true');
+          frame.setAttribute('spellcheck', 'false');
+        }
+        if (dock) dock.classList.remove('hidden');
+        if (toggleBtn) {
+          toggleBtn.classList.remove('bg-slate-800', 'text-slate-300');
+          toggleBtn.classList.add('bg-emerald-600', 'text-white', 'ring-2', 'ring-emerald-400');
+          toggleBtn.innerHTML = '<span>✏️ Visual Editor: ON</span>';
+        }
+        attachEditorListeners();
+      } else {
+        document.body.classList.remove('editor-active');
+        document.designMode = 'off';
+        if (frame) frame.removeAttribute('contenteditable');
+        if (dock) dock.classList.add('hidden');
+        if (toggleBtn) {
+          toggleBtn.classList.add('bg-slate-800', 'text-slate-300');
+          toggleBtn.classList.remove('bg-emerald-600', 'text-white', 'ring-2', 'ring-emerald-400');
+          toggleBtn.innerHTML = '<span>✏️ Visual Editor: OFF</span>';
+        }
+        if (activeElement) {
+          activeElement.classList.remove('editor-selected');
+          activeElement = null;
+        }
+      }
+    }
+
+    function attachEditorListeners() {
+      const container = document.getElementById('viewport-frame');
+      if (!container) return;
+
+      const cards = container.querySelectorAll('.border, .placeholder-box');
+      cards.forEach(c => {
+        c.classList.add('editor-selectable');
+        c.addEventListener('click', function(e) {
+          if (!isEditorActive) return;
+          if (activeElement) activeElement.classList.remove('editor-selected');
+          activeElement = this;
+          activeElement.classList.add('editor-selected');
+          const label = activeElement.tagName.toLowerCase() + (activeElement.className ? '.' + activeElement.className.split(' ')[0] : '');
+          const labelEl = document.getElementById('editor-target-label');
+          if (labelEl) labelEl.innerText = label;
+        }, true);
+      });
+
+      const clickable = container.querySelectorAll('a, button');
+      clickable.forEach(el => {
+        el.addEventListener('click', function(e) {
+          if (isEditorActive) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.focus();
+          }
+        }, true);
+      });
+    }
+
+    function applyStyle(type, value) {
+      if (!activeElement) {
+        alert('Please click on any card or text block first to select it.');
+        return;
+      }
+      if (type === 'textSize') {
+        activeElement.classList.remove('text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl');
+        if (value === 'sm') activeElement.classList.add('text-xs');
+        if (value === 'base') activeElement.classList.add('text-sm');
+        if (value === 'lg') activeElement.classList.add('text-lg');
+        if (value === 'xl') activeElement.classList.add('text-2xl');
+      }
+      if (type === 'padding') {
+        activeElement.classList.remove('p-2', 'p-3', 'p-4', 'p-5', 'p-6', 'p-8', 'p-10');
+        if (value === 'tight') activeElement.classList.add('p-3');
+        if (value === 'normal') activeElement.classList.add('p-6');
+        if (value === 'roomy') activeElement.classList.add('p-10');
+      }
+    }
+
+    function moveActiveElement(dir) {
+      if (!activeElement || !activeElement.parentElement) {
+        alert('Click on a card or container first to reorder it.');
+        return;
+      }
+      const parent = activeElement.parentElement;
+      if (dir === 'up' && activeElement.previousElementSibling) {
+        parent.insertBefore(activeElement, activeElement.previousElementSibling);
+      } else if (dir === 'down' && activeElement.nextElementSibling) {
+        parent.insertBefore(activeElement.nextElementSibling, activeElement);
+      }
+    }
+
+    function toggleHideActiveElement() {
+      if (!activeElement) {
+        alert('Click on a block first to toggle visibility.');
+        return;
+      }
+      activeElement.classList.toggle('opacity-25');
+    }
+
+    function saveLocalEdits() {
+      const container = document.getElementById('viewport-frame');
+      if (!container) return;
+      localStorage.setItem('energize_wireframe_edits', container.innerHTML);
+      alert('Edits saved to browser LocalStorage! Your changes will persist on refresh.');
+    }
+
+    function resetDefaultEdits() {
+      if (confirm('Reset to original blueprint layout?')) {
+        localStorage.removeItem('energize_wireframe_edits');
+        window.location.reload();
+      }
+    }
+
+    function exportUpdatedHTML() {
+      const clone = document.documentElement.cloneNode(true);
+      const body = clone.querySelector('body');
+      if (body) body.classList.remove('editor-active');
+      const frame = clone.querySelector('#viewport-frame');
+      if (frame) frame.removeAttribute('contenteditable');
+      const dock = clone.querySelector('#editor-dock');
+      if (dock) dock.classList.add('hidden');
+      const btn = clone.querySelector('#btn-toggle-editor');
+      if (btn) {
+        btn.className = 'bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold px-2.5 py-1.5 rounded border border-slate-600 transition flex items-center space-x-1';
+        btn.innerHTML = '<span>✏️ Visual Editor: OFF</span>';
+      }
+      const banner = clone.querySelector('#saved-banner');
+      if (banner) banner.remove();
+
+      const blob = new Blob([clone.outerHTML], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'prototype-finessed.html';
+      a.click();
+    }
+
+    // Check for saved edits on load
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('energize_wireframe_edits');
+      if (saved) {
+        const frame = document.getElementById('viewport-frame');
+        if (frame) {
+          frame.innerHTML = saved;
+          const info = document.createElement('div');
+          info.id = 'saved-banner';
+          info.className = 'bg-amber-500 text-slate-950 font-bold px-4 py-1 text-xs text-center font-mono';
+          info.innerHTML = '⚡ Loaded your previously saved edits from LocalStorage. <a href="#" onclick="resetDefaultEdits()" class="underline ml-2">Reset to default</a>';
+          document.body.prepend(info);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
