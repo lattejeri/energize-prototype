@@ -3,56 +3,483 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="0; url=./#services">
-  <title>Energize Industries — Electrical Services & Capabilities</title>
+  <title>Electrical Services & Capabilities — Energize Industries</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    window.location.replace('./#services');
+    tailwind.config = {
+      theme: {
+        borderRadius: {
+          none: '0px',
+          DEFAULT: '0px',
+          sm: '0px',
+          md: '0px',
+          lg: '0px',
+          xl: '0px',
+          '2xl': '0px',
+          '3xl': '0px',
+          full: '0px',
+        },
+        extend: {
+          colors: {
+            blueprint: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+              950: '#020617',
+            }
+          },
+          fontFamily: {
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+            sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
   </script>
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #f8fafc;
-      color: #334155;
+    /* Strict Schematic Wireframe: 0px border radius across all elements */
+    *, ::before, ::after {
+      border-radius: 0px !important;
+    }
+    /* Full bleed schematic styling */
+    .blueprint-grid {
+      background-size: 24px 24px;
+      background-image: 
+        linear-gradient(to right, rgba(203, 213, 225, 0.3) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(203, 213, 225, 0.3) 1px, transparent 1px);
+    }
+    .placeholder-box {
+      background-color: #f1f5f9;
+      border: 1.5px dashed #94a3b8;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      margin: 0;
-      text-align: center;
-      padding: 20px;
+      color: #475569;
+      font-family: ui-monospace, monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
     }
-    .box {
-      background: white;
-      border: 1px solid #cbd5e1;
-      padding: 32px 40px;
-      max-width: 480px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    .badge-spec {
+      font-family: ui-monospace, monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.03em;
     }
-    h1 {
-      font-size: 18px;
-      font-weight: 700;
-      margin: 0 0 12px 0;
-      color: #0f172a;
+    /* Live Visual Editor Styles */
+    body.editor-active [data-editable="true"] {
+      transition: outline 0.15s ease, background-color 0.15s ease;
+      cursor: text !important;
     }
-    p {
-      font-size: 14px;
-      color: #64748b;
-      margin: 0 0 16px 0;
-      line-height: 1.5;
+    body.editor-active [data-editable="true"]:hover {
+      outline: 2px dashed #0f172a !important;
+      outline-offset: 2px;
+      background-color: rgba(241, 245, 249, 0.8) !important;
     }
-    a {
-      color: #0f172a;
-      font-weight: 600;
-      text-decoration: underline;
+    body.editor-active [data-editable="true"]:focus {
+      outline: 2px solid #0f172a !important;
+      outline-offset: 2px;
+      background-color: rgba(226, 232, 240, 0.95) !important;
+    }
+    body.editor-active .editor-selectable:hover {
+      box-shadow: 0 0 0 2px #475569 !important;
+    }
+    body.editor-active .editor-selected {
+      box-shadow: 0 0 0 3px #0f172a !important;
     }
   </style>
 </head>
-<body>
-  <div class="box">
-    <h1>Energize Industries — Electrical Services & Capabilities</h1>
-    <p>Opening template view in prototype...</p>
-    <p><a href="./#services">Click here if not redirected automatically →</a></p>
-  </div>
+<body class="bg-white text-slate-900 antialiased font-sans flex flex-col min-h-screen">
+
+  <!-- ================================================================= -->
+  <!-- GLOBAL SITE HEADER (STARTS WITH QLD LICENCE RIBBON)              -->
+  <!-- ================================================================= -->
+  <header class="bg-white text-slate-900 border-b border-slate-300 sticky top-0 z-40">
+        <div class="bg-slate-50 px-6 lg:px-12 py-1.5 text-xs text-slate-600 flex justify-between items-center font-mono border-b border-slate-200">
+          <div class="flex items-center space-x-4">
+            <span>QLD electrical contractor licence: <strong class="text-slate-800">#70739</strong></span>
+            <span class="hidden md:inline">ABN: 39 136 854 754</span>
+            <span class="hidden lg:inline">Master Electricians Australia accredited</span>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span>Geebung, Brisbane HQ</span>
+            <a href="tel:0738656500" class="font-bold text-slate-900 hover:underline">(07) 3865 6500</a>
+          </div>
+        </div>
+
+        <!-- Main nav bar -->
+        <div class="px-6 lg:px-12 py-4 flex items-center justify-between">
+          <div class="flex items-center cursor-pointer" onclick="switchTemplate('home')">
+            <svg class="h-9 w-auto" viewBox="46 47 152 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="nav_logo_gradient" x1="50.251" y1="71.7288" x2="50.251" y2="48.9531" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#FD5304"/>
+                  <stop offset="1" stop-color="#FF5F06"/>
+                </linearGradient>
+              </defs>
+              <path d="M127.643 47.5235L127.649 47.5238H127.649L127.651 47.5239L127.655 47.5242C128.847 47.5755 130.687 48.0673 131.066 49.3789C131.391 50.4079 131.077 51.5234 130.498 53.069C129.501 56.2191 128.46 59.1042 128.064 60.1529C127.766 60.8322 126.969 62.0195 125.753 62.8093L125.753 62.8095C125.405 63.0354 124.975 63.228 124.478 63.3444C124.086 63.4359 123.639 63.4793 123.157 63.4793C123.161 63.5017 124.385 69.2623 124.997 71.8099L125.016 71.8893H124.935L118.761 71.8893L118.685 71.8099L116.865 63.4793H115.46L112.61 71.8099L112.583 71.8893H112.5L106.663 71.8893L106.586 71.8099L114.244 49.0342L114.27 48.9531H114.354L127.117 48.9531L127.193 49.0342L127.609 48.9531L127.643 47.5235Z" fill="black"/>
+              <path d="M127.626 48.4768L127.63 48.477C128.385 48.5097 129.483 48.777 129.743 49.6738C129.98 50.4262 129.721 51.2721 129.176 52.7219C128.179 55.872 127.138 58.7571 126.742 59.8058C126.37 60.6534 125.264 62.1387 123.515 62.7797L123.515 62.7799C123.477 62.7937 123.438 62.8066 123.398 62.8185C123.398 62.8185 124.622 68.5791 125.234 71.1267L125.253 71.2061H125.172L119.098 71.2061L119.022 71.1267L117.202 62.7961H115.797L112.947 71.1267L112.92 71.2061H112.837L107.099 71.2061L107.022 71.1267L114.68 48.351L114.706 48.27H114.79L127.553 48.27L127.626 48.4768Z" fill="white"/>
+              <path d="M48.0728 85.1533L50.3597 83.095H63.3827L61.3203 85.1533H48.0728Z" fill="#FD4103"/>
+              <path d="M70.2341 80.7682L70.2947 80.8307L68.0818 87.8786L68.033 87.9899H66.1667L66.3201 87.5446H66.321L68.4128 80.8307L68.5183 80.7575L70.2341 80.7682Z" fill="black"/>
+              <path d="M82.2434 80.7567L82.2639 80.7674L82.3186 80.7684L82.3792 80.8309L80.1706 87.8787L80.0526 87.9899H78.8524L78.7303 87.8696L77.7126 83.5684L77.6251 83.5484L76.2483 87.8787L76.1263 87.9899H74.3216L74.475 87.5447H74.4759L76.5678 80.8309L76.6732 80.7576L78.6946 80.7684L78.7552 80.8309L79.8051 85.2536L79.8887 85.2536L81.2989 80.8309L81.4082 80.7576L82.2434 80.7567Z" fill="black"/>
+              <path d="M91.8112 87.5064C91.5979 87.6609 91.3585 87.7757 91.1045 87.8456C90.8505 87.9156 90.587 87.9392 90.3255 87.9155C89.4475 87.836 88.6656 87.5457 88.0837 86.8322C87.5019 86.1187 87.271 85.1611 87.5034 84.0924C87.747 82.9719 88.3584 82.0805 89.1793 81.5451C90.0001 81.0097 91.0267 80.7513 92.1287 80.7685L92.2045 80.831L91.849 82.1158L91.7309 82.1783C91.1396 82.0911 90.5401 82.1866 90.0163 82.4632C89.4925 82.7397 89.0699 83.1843 88.8284 83.7431C88.5868 84.3019 88.5369 84.949 88.6874 85.5454C88.8379 86.1418 89.1818 86.6603 89.6644 87.0094C90.047 87.2861 90.5235 87.4116 90.999 87.3608C91.4746 87.31 91.9169 87.0864 92.2372 86.7352L92.3465 86.7039L92.0954 87.4856L91.8112 87.5064Z" fill="black"/>
+              <path d="M102.354 86.4838L102.487 86.3589L104.237 80.7584C104.979 80.7725 105.786 80.7728 106.608 80.7584L106.662 80.8311L104.454 87.8789L104.336 87.9902H102.487L102.392 87.8964L100.835 83.2246L100.732 83.2246L99.2882 87.8789L99.1661 87.9902H97.3614L97.5148 87.545H97.5157L99.6077 80.8311L99.7131 80.7578L101.536 80.7686L101.597 80.8311L102.354 86.4838Z" fill="black"/>
+              <path d="M117.306 81.0858C117.326 81.1062 117.341 81.1309 117.349 81.1583C117.512 81.7107 117.202 82.4965 116.892 83.0567C116.582 83.6169 116.143 84.1486 115.592 84.4452C115.399 84.549 115.19 84.6212 114.973 84.659L114.885 84.7007L114.436 86.1304L114.497 86.1781L117.738 86.1885L117.8 86.2257C117.809 86.6098 117.469 87.3008 117.356 87.5963L112.21 87.6077L112.16 87.5601L114.354 80.507L114.47 80.4117L116.634 80.4155C116.924 80.4155 117.159 80.7161 117.306 81.0858Z" fill="black"/>
+              <path d="M128.907 80.7354C128.952 81.0843 128.633 81.8575 128.599 81.9747L128.469 82.1173H126.754L126.632 82.1651L124.848 87.8614L124.813 87.8868L124.768 87.9903H123.5C123.435 87.9975 123.394 87.9978 123.345 87.9903H122.902L123.055 87.545H123.056L124.738 82.1466L124.657 82.1173H122.942L122.89 82.0704L123.298 80.7354C125.067 80.7354 127 80.7023 128.851 80.7032L128.907 80.7354Z" fill="black"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M134.798 80.7637C134.828 80.7453 134.863 80.7355 134.898 80.7355H139.028L139.407 80.7804C139.422 80.7823 139.438 80.786 139.452 80.7915L139.68 80.8781C139.704 80.8872 139.726 80.901 139.744 80.9187L140.015 81.1787C140.038 81.2006 140.055 81.2279 140.065 81.2581L140.131 81.4646C140.138 81.4867 140.141 81.5097 140.139 81.5329C140.05 83.0735 139.626 84.9846 137.975 85.2937C137.933 85.3017 137.896 85.3307 137.88 85.3712C137.872 85.3938 137.87 85.4183 137.876 85.4418L138.415 87.7517C138.421 87.7758 138.42 87.801 138.412 87.8246C138.394 87.8805 138.342 87.9185 138.284 87.9189L136.607 87.9313C136.583 87.9314 136.56 87.9255 136.54 87.9142C136.505 87.8949 136.481 87.8616 136.473 87.8228L135.981 85.4508C135.975 85.4219 135.958 85.3963 135.934 85.3793C135.914 85.3655 135.891 85.3581 135.867 85.3581H135.271C135.248 85.3581 135.226 85.3621 135.205 85.3698L135.196 85.3731C135.14 85.3937 135.096 85.4415 135.079 85.4986C134.494 87.4267 134.747 86.765 134.331 87.8007C134.303 87.8726 134.233 87.9204 134.155 87.921L132.592 87.9314C132.576 87.9315 132.561 87.9276 132.547 87.9202C132.508 87.8991 132.49 87.8535 132.503 87.8114L134.667 80.899C134.681 80.8551 134.71 80.8176 134.749 80.7935L134.798 80.7637ZM135.586 83.873C135.584 83.8782 135.584 83.8836 135.584 83.889C135.584 83.9212 135.61 83.9473 135.642 83.9469L137.442 83.9284C137.494 83.9278 137.544 83.9056 137.58 83.8671L137.713 83.7229C137.733 83.7014 137.748 83.6755 137.756 83.6474L138.127 82.3852C138.133 82.3658 138.135 82.3455 138.133 82.3253C138.13 82.2838 138.11 82.2453 138.078 82.218L138.054 82.1966C138.019 82.1671 137.976 82.1507 137.931 82.1502L136.327 82.1342C136.245 82.1333 136.172 82.1848 136.144 82.2619C135.984 82.71 135.739 83.3482 135.586 83.873Z" fill="black"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M146.758 80.7355L148.389 80.7527L148.516 80.8308L146.316 87.7886L146.197 87.9315L144.482 87.9287L144.438 87.7886L146.615 80.8308L146.758 80.7355Z" fill="black"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M154.653 80.7355L159.636 80.7393L159.677 80.8308L159.255 82.1242L156.013 82.1652L155.562 83.4996L155.633 83.5682L158.302 83.5739L158.365 83.6902C158.023 84.8253 158.221 84.4165 157.921 84.9797H155.157L155.069 85.0245L154.619 86.4542L154.68 86.5019L157.921 86.5123L157.983 86.5495C157.992 86.9336 157.652 87.6246 157.539 87.9201L152.393 87.9315L152.343 87.8839L154.537 80.8308L154.653 80.7355Z" fill="black"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M170.925 81.1168L171.016 81.3074C171.016 82.0852 170.972 82.1428 170.729 82.6418L170.597 82.7848L168.977 82.7867L168.917 82.7371L169.05 82.2605L168.977 82.1805L167.261 82.1414L167.07 82.2148L166.963 82.3559L166.716 83.309L166.784 83.4157L168.881 83.6597L169.644 83.8379L169.971 84.0715L170.129 84.4527C170.15 85.2295 169.651 86.2417 169.492 86.8355L169.291 87.2167L168.881 87.6294L168.5 87.8286L168.119 87.9258C167.144 87.9715 165.245 87.9987 164.116 87.8353L163.825 87.598L163.716 87.4074C163.667 86.8765 163.821 86.5067 164.019 85.9777L164.116 85.9205L165.736 85.9167L165.807 85.9777L165.694 86.4542L165.831 86.5324C167.614 86.5219 167.261 86.5324 167.734 86.4542C168.007 86.0542 168.007 85.7089 168.149 85.3105V85.1738L167.642 85.0884C166.716 84.8552 165.539 85.029 164.757 84.4527L164.663 84.1668C164.875 82.7285 165.278 82.0267 165.417 81.5934L165.609 81.3074L166.022 80.9767L166.403 80.8109L167.07 80.6946L170.025 80.7108L170.502 80.8004C170.643 80.9062 170.797 80.9948 170.925 81.1168Z" fill="black"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M127.609 48.9531C128.987 49.0125 131.495 49.9188 130.498 53.069C129.501 56.2191 128.46 59.1042 128.064 60.1529C127.589 61.2347 125.998 63.3982 123.434 63.3982C123.438 63.4206 124.662 69.1812 125.274 71.7288H119.1L117.28 63.3982H115.875L113.025 71.7288H107.188L114.846 48.9531H127.609ZM123.157 53.6428H119.12L117.28 59.0616H121.567C122.451 59.0616 122.908 58.3778 123.025 58.0359L123.968 55.0477C124.278 53.8923 123.556 53.6297 123.157 53.6428Z" fill="url(#nav_logo_gradient)"/>
+              <path d="M139.86 48.9778C144.705 48.9778 149.532 48.996 151.34 49.0052L149.709 53.6258H139.924C139.495 53.6114 138.53 53.9016 138.1 55.1776C137.671 56.4537 135.625 62.4712 134.655 65.3204C134.405 65.8782 134.203 66.9937 135.394 66.9937H139.306C139.52 67.0143 140 66.8633 140.206 66.0936C140.412 65.3239 141.1 63.3188 141.418 62.4124H138.325L139.86 57.8195H148.526L143.979 71.7029H131.253C129.714 71.6949 126.961 70.6982 128.263 66.7752C129.564 62.8521 131.532 56.8 132.353 54.2644C132.837 52.5022 135.014 48.9778 139.86 48.9778Z" fill="url(#nav_logo_gradient)"/>
+              <path d="M152.565 71.7029H146.632L154.091 49.0052H160.167L152.565 71.7029Z" fill="url(#nav_logo_gradient)"/>
+              <path d="M175.633 54.1357L163.527 67.0279H171.701L170.057 71.7029H154.996L156.426 67.3854L168.865 53.6114H161.168L162.717 49.0052L177.373 48.9882L175.633 54.1357Z" fill="url(#nav_logo_gradient)"/>
+              <path d="M82.1792 49.0219L84.8066 60.939L88.9667 49.0219H94.7219L87.1525 71.6987H81.3347L78.4571 59.9068L74.3596 71.6987H68.6983L76.2363 49.0219H82.1792Z" fill="url(#nav_logo_gradient)"/>
+              <path d="M72.0062 53.6731H62.2659L60.8814 57.5297H69.7813L68.1497 62.4247H59.4476L57.9148 66.9735H67.853L66.2708 71.6706H50.251L57.9148 49.0254H73.6379L72.0062 53.6731Z" fill="url(#nav_logo_gradient)"/>
+              <path d="M111.295 53.6731H101.555L100.17 57.5297H109.07L107.438 62.4247H98.7363L97.2036 66.9735H107.142L105.56 71.6706H89.5398L97.2036 49.0254H112.927L111.295 53.6731Z" fill="url(#nav_logo_gradient)"/>
+              <path d="M193.897 53.6731H184.156L182.772 57.5297H191.672L190.04 62.4247H181.338L179.805 66.9735H189.744L188.161 71.6706H172.142L179.805 49.0254H195.529L193.897 53.6731Z" fill="url(#nav_logo_gradient)"/>
+              <path d="M48.0728 78.0282L50.3597 75.97H187.954L185.892 78.0282H48.0728Z" fill="#FD4103"/>
+              <path d="M172.623 85.1533L174.91 83.095H186.598L184.536 85.1533H172.623Z" fill="#FD4103"/>
+            </svg>
+          </div>
+
+          <nav class="hidden lg:flex items-center space-x-8 text-sm font-medium text-slate-600">
+            <button data-nav="home" onclick="switchTemplate('home')" class="text-slate-600 hover:text-slate-950 border-b-2 border-transparent py-1 transition">Home</button>
+            <button data-nav="why" onclick="switchTemplate('why')" class="text-slate-600 hover:text-slate-950 border-b-2 border-transparent py-1 transition">Why Energize</button>
+            <button data-nav="services" onclick="switchTemplate('services')" class="text-slate-950 font-bold border-b-2 border-slate-900 py-1 transition">Services</button>
+            <button data-nav="work" onclick="switchTemplate('work')" class="text-slate-600 hover:text-slate-950 border-b-2 border-transparent py-1 transition">Work portfolio</button>
+            <button data-nav="contact" onclick="switchTemplate('contact')" class="text-slate-600 hover:text-slate-950 border-b-2 border-transparent py-1 transition">Contact</button>
+          </nav>
+
+          <div class="flex items-center space-x-3">
+            <button onclick="switchTemplate('capability')" class="hidden sm:inline-flex items-center text-xs font-semibold px-4 py-2.5 border border-slate-300 hover:bg-slate-50 text-slate-700 transition">
+              Download capability statement [PDF]
+            </button>
+            <button onclick="switchTemplate('quote')" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2.5 shadow-sm flex items-center transition">
+              Request a quote
+              <svg class="w-3.5 h-3.5 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
+            <!-- Mobile Hamburger Menu Button -->
+            <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-slate-700 hover:text-slate-950 focus:outline-none" aria-label="Toggle navigation menu">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobile-nav-drawer" class="hidden lg:hidden border-t border-slate-200 bg-white px-6 py-4 space-y-3 font-medium text-sm text-slate-700 shadow-lg">
+          <button data-mobile-nav="home" onclick="switchTemplate('home'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 transition text-slate-700 hover:text-slate-950">Home</button>
+          <button data-mobile-nav="why" onclick="switchTemplate('why'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 transition text-slate-700 hover:text-slate-950">Why Energize</button>
+          <button data-mobile-nav="services" onclick="switchTemplate('services'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 transition text-slate-950 font-bold bg-slate-100 pl-3">Services</button>
+          <button data-mobile-nav="work" onclick="switchTemplate('work'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 transition text-slate-700 hover:text-slate-950">Work portfolio</button>
+          <button data-mobile-nav="contact" onclick="switchTemplate('contact'); toggleMobileMenu()" class="block w-full text-left py-2 border-b border-slate-100 transition text-slate-700 hover:text-slate-950">Contact</button>
+          <div class="pt-2 flex flex-col gap-2">
+            <button onclick="switchTemplate('capability'); toggleMobileMenu()" class="w-full text-center py-2.5 border border-slate-300 text-xs font-semibold">Download capability statement [PDF]</button>
+            <button onclick="switchTemplate('quote'); toggleMobileMenu()" class="w-full text-center py-2.5 bg-slate-900 text-white text-xs font-bold">Request a quote →</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="w-full bg-white flex-1">
+
+<section id="template-services" class="template-view">
+        
+        <!-- Hero: Turnkey, In-house design, Experienced workforce -->
+        <div class="bg-slate-50 text-slate-900 py-20 px-6 lg:px-16 border-b border-slate-300 blueprint-grid">
+          <div class="max-w-4xl mx-auto">
+            <span class="badge-spec bg-white text-slate-800 border border-slate-300 px-3 py-1 shadow-sm">Commercial capabilities</span>
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight mt-4 mb-6">
+              Complete turnkey electrical contracting and compliance
+            </h1>
+            <p class="text-base sm:text-lg text-slate-600 leading-relaxed mb-6">
+              Energize combines full in-house design capabilities (ECI & D&C) with an experienced workforce who care about the quality of their work. Every commercial package is personally overseen by founding directors Dan Monti and Jason Edwards.
+            </p>
+            <div class="flex flex-wrap gap-4 pt-2">
+              <button onclick="switchTemplate('quote')" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-3 text-xs sm:text-sm shadow-sm">
+                Request a quote / submit tender
+              </button>
+              <button onclick="switchTemplate('capability')" class="bg-white hover:bg-slate-50 text-slate-700 font-semibold px-6 py-3 text-xs sm:text-sm border border-slate-300">
+                Download capability statement [PDF]
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CATEGORY 1: Fulfill conformance and statutory requirements -->
+        <div class="bg-white py-16 px-6 lg:px-16 border-b border-slate-200">
+          <div class="max-w-6xl mx-auto">
+            <div class="max-w-2xl mb-10">
+              <span class="badge-spec bg-slate-100 text-slate-800 border border-slate-300 px-2.5 py-0.5">Category 01</span>
+              <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-2">
+                Fulfill conformance and statutory requirements
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-600 mt-1">
+                Scheduled testing, auditing, and certification ensuring full compliance with Australian Standards and underwriter criteria.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+              
+              <div class="p-6 bg-white border border-slate-200 flex flex-col justify-between hover:border-slate-400 transition cursor-pointer" onclick="switchTemplate('service-detail')">
+                <div>
+                  <h3 class="text-lg font-bold text-slate-900 mb-2">Infrared thermal imaging</h3>
+                  <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                    Live switchboard radiometric scanning detecting hot spots and overloaded phases before catastrophic fire. Fulfills mandatory insurer underwriting criteria without operational shutdown.
+                  </p>
+                </div>
+                <div class="pt-4 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span class="font-mono text-slate-500">AS ISO 18434-1</span>
+                  <span class="font-bold text-slate-900">View service →</span>
+                </div>
+              </div>
+
+              <div class="p-6 bg-slate-50 border border-slate-200 flex flex-col justify-between hover:border-slate-400 transition cursor-pointer" onclick="switchTemplate('service-detail')">
+                <div>
+                  <h3 class="text-lg font-bold text-slate-900 mb-2">Emergency & exit lighting testing</h3>
+                  <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                    Mandatory 6-monthly 90-minute battery discharge tests, luminaire replacement, and automated compliance logbooks ready for council and fire brigade audits.
+                  </p>
+                </div>
+                <div class="pt-4 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span class="font-mono text-slate-500">AS/NZS 2293</span>
+                  <span class="font-bold text-slate-900">View service →</span>
+                </div>
+              </div>
+
+              <div class="p-6 bg-slate-50 border border-slate-200 flex flex-col justify-between hover:border-slate-400 transition cursor-pointer" onclick="switchTemplate('service-detail')">
+                <div>
+                  <h3 class="text-lg font-bold text-slate-900 mb-2">RCD safety switch testing</h3>
+                  <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                    Precision millisecond trip-time testing verifying disconnection thresholds to protect personnel from lethal electrocution and satisfy WorkSafe obligations.
+                  </p>
+                </div>
+                <div class="pt-4 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span class="font-mono text-slate-500">AS/NZS 3760</span>
+                  <span class="font-bold text-slate-900">View service →</span>
+                </div>
+              </div>
+
+              <div class="p-6 bg-slate-50 border border-slate-200 flex flex-col justify-between hover:border-slate-400 transition cursor-pointer" onclick="switchTemplate('service-detail')">
+                <div>
+                  <h3 class="text-lg font-bold text-slate-900 mb-2">Electrical safety audits & RCBO upgrades</h3>
+                  <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                    Comprehensive hazard evaluation replacing obsolete switchboards and dangerous ceramic rewireable fuses with modern modular RCBO protection.
+                  </p>
+                </div>
+                <div class="pt-4 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span class="font-mono text-slate-500">AS/NZS 3000</span>
+                  <span class="font-bold text-slate-900">View service →</span>
+                </div>
+              </div>
+
+              <div class="p-6 bg-slate-50 border border-slate-200 flex flex-col justify-between hover:border-slate-400 transition cursor-pointer" onclick="switchTemplate('service-detail')">
+                <div>
+                  <h3 class="text-lg font-bold text-slate-900 mb-2">Portable appliance test and tag</h3>
+                  <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                    Itemized inspection and electrical parameter testing of single and polyphase portable equipment with non-reusable compliance tags and electronic logbooks.
+                  </p>
+                </div>
+                <div class="pt-4 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span class="font-mono text-slate-500">AS/NZS 3760 & 3012</span>
+                  <span class="font-bold text-slate-900">View service →</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- CATEGORY 2: Eliminate engineering clashes & reduce project CAPEX -->
+        <div class="bg-slate-50 py-16 px-6 lg:px-16 border-b border-slate-200">
+          <div class="max-w-6xl mx-auto">
+            <div class="max-w-2xl mb-10">
+              <span class="badge-spec bg-slate-100 text-slate-800 border border-slate-300 px-2.5 py-0.5">Category 02</span>
+              <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-2">
+                Eliminate engineering clashes and reduce project CAPEX
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-600 mt-1">
+                Upfront engineering involvement and turnkey design resolving problems before they reach the job site.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              
+              <div class="p-8 bg-white border border-slate-200 flex flex-col justify-between hover:border-slate-400 transition cursor-pointer" onclick="switchTemplate('service-detail')">
+                <div>
+                  <h3 class="text-xl font-bold text-slate-900 mb-2">Early contractor involvement (ECI) & design and construct (D&C)</h3>
+                  <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                    Partnering with developers and head contractors at initial planning stages to audit designs, evaluate constructability, resolve clashes, and identify substantial cost-saving engineering alternatives.
+                  </p>
+                  <div class="text-xs text-slate-500 font-mono mb-4">Verified in: Customs House Green Star Office, Coles Silkstone</div>
+                </div>
+                <div class="text-xs font-bold text-slate-900">Explore D&C capabilities →</div>
+              </div>
+
+              <div class="p-8 bg-white border border-slate-200 flex flex-col justify-between hover:border-slate-400 transition cursor-pointer" onclick="switchTemplate('service-detail')">
+                <div>
+                  <h3 class="text-xl font-bold text-slate-900 mb-2">Energy-efficient lighting auditing & LED upgrades</h3>
+                  <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                    Detailed photometric evaluations replacing legacy high-consumption luminaires with commercial solid-state LED systems—cutting lighting energy by up to 70–88% and eliminating ongoing relamping costs.
+                  </p>
+                  <div class="text-xs text-slate-500 font-mono mb-4">Longevity: Commercial LEDs rated up to 50,000 continuous hours</div>
+                </div>
+                <div class="text-xs font-bold text-slate-900">Explore lighting upgrades →</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- CATEGORY 3: Minimize operational downtime & manage live risk -->
+        <div class="bg-white py-16 px-6 lg:px-16 border-b border-slate-200">
+          <div class="max-w-6xl mx-auto">
+            <div class="max-w-2xl mb-10">
+              <span class="badge-spec bg-slate-100 text-slate-800 border border-slate-300 px-2.5 py-0.5">Category 03</span>
+              <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-2">
+                Minimize operational downtime and manage live risk
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-600 mt-1">
+                Executing complex shutdowns, main switchboard replacements, and live changeovers with zero unscheduled outage.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+              
+              <div class="p-6 bg-white border border-slate-200 flex flex-col justify-between hover:border-slate-400 transition cursor-pointer" onclick="switchTemplate('service-detail')">
+                <div>
+                  <h3 class="text-lg font-bold text-slate-900 mb-2">High voltage (HV) & substation integration</h3>
+                  <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                    Complex network shutdowns, Energex liaison, transformer augmentation, and high-voltage conduit reticulation managed with zero incident.
+                  </p>
+                </div>
+                <div class="text-xs font-bold text-slate-900 pt-3 border-t border-slate-200">View HV capabilities →</div>
+              </div>
+
+              <div class="p-6 bg-slate-50 border border-slate-200 flex flex-col justify-between hover:border-slate-400 transition cursor-pointer" onclick="switchTemplate('service-detail')">
+                <div>
+                  <h3 class="text-lg font-bold text-slate-900 mb-2">Main switchboard (MSB) changeovers</h3>
+                  <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                    Live-environment switchboard replacements staged out-of-hours to ensure complete continuity of tenant operations.
+                  </p>
+                </div>
+                <div class="text-xs font-bold text-slate-900 pt-3 border-t border-slate-200">View MSB services →</div>
+              </div>
+
+              <div class="p-6 bg-slate-50 border border-slate-200 flex flex-col justify-between hover:border-slate-400 transition cursor-pointer" onclick="switchTemplate('service-detail')">
+                <div>
+                  <h3 class="text-lg font-bold text-slate-900 mb-2">Commercial construction & fitouts</h3>
+                  <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                    Supermarket packages, retail tenancies, warehouse distribution centres, and institutional builds delivered on compressed programs.
+                  </p>
+                </div>
+                <div class="text-xs font-bold text-slate-900 pt-3 border-t border-slate-200">View construction →</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Capability Statement Pre-Footer Block (2-Column Split Layout) -->
+        <div class="bg-white text-slate-900 py-20 px-6 lg:px-16 border-t border-slate-300">
+          <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Left Column: Copy -->
+            <div class="lg:col-span-7">
+              <h3 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4" data-editable="true">
+                Evaluating electrical subcontractors for an upcoming project?
+              </h3>
+              <p class="text-sm sm:text-base text-slate-600 max-w-xl leading-relaxed font-mono" data-editable="true">
+                Download our complete 2026 commercial capability statement containing placeholder information that goes over 2-3 lines.
+              </p>
+            </div>
+
+            <!-- Right Column: Slide deck cover placeholder + Download button -->
+            <div class="lg:col-span-5 flex flex-col items-center">
+              <div class="placeholder-box w-full h-44 bg-slate-100 border border-slate-300 flex items-center justify-center font-mono text-sm text-slate-500 mb-4 shadow-sm">
+                Instant PDF download & tender summary
+              </div>
+              <button onclick="switchTemplate('capability')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 px-6 text-xs sm:text-sm shadow-sm transition text-center">
+                Download capability statement [PDF] →
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+</main>
+
+  <!-- ===================================================================== -->
+  <!-- JAVASCRIPT ENGINE (NAVIGATION & INTERACTION)                          -->
+  <!-- ===================================================================== -->
+  <script>
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobile-nav-drawer');
+      if (drawer) {
+        drawer.classList.toggle('hidden');
+      }
+    }
+
+    function switchTemplate(target) {
+      const pageMap = {
+        'home': 'index.html',
+        'why': 'why.html',
+        'services': 'services.html',
+        'service-detail': 'service-detail.html',
+        'work': 'work.html',
+        'work-detail': 'work-detail.html',
+        'contact': 'contact.html',
+        'quote': 'quote.html',
+        'capability': 'capability.html'
+      };
+      const dest = pageMap[target] || (target + '.html');
+      window.location.href = dest;
+    }
+
+    function setPhilosophyCard(index) {
+      for (let i = 1; i <= 3; i++) {
+        const card = document.getElementById('philosophy-card-' + i);
+        if (!card) continue;
+        const body = card.querySelector('.philosophy-body');
+        const num = card.querySelector('.philosophy-num');
+        const title = card.querySelector('.philosophy-title');
+        
+        if (i === index) {
+          card.className = 'philosophy-card bg-slate-900 text-white p-6 shadow-md transition-all duration-200 cursor-pointer';
+          if (body) body.classList.remove('hidden');
+          if (num) num.className = 'philosophy-num font-mono text-xs text-slate-400 font-bold uppercase tracking-wider mb-1';
+          if (title) title.className = 'philosophy-title text-2xl sm:text-3xl font-black text-white mb-2';
+        } else {
+          card.className = 'philosophy-card bg-white border border-slate-200 hover:border-slate-400 text-slate-900 p-6 transition-all duration-200 cursor-pointer';
+          if (body) body.classList.add('hidden');
+          if (num) num.className = 'philosophy-num font-mono text-xs text-slate-500 font-bold uppercase tracking-wider mb-1';
+          if (title) title.className = 'philosophy-title text-2xl sm:text-3xl font-black text-slate-900';
+        }
+      }
+    }
+
+    function setDedicatedQuoteTrack(track) {
+      const tenderBtn = document.getElementById('btn-page-track-tender');
+      const compBtn = document.getElementById('btn-page-track-compliance');
+      const tenderFields = document.getElementById('page-tender-fields');
+      if (track === 'tender') {
+        if (tenderBtn) tenderBtn.className = 'py-2.5 bg-slate-900 text-white shadow-sm';
+        if (compBtn) compBtn.className = 'py-2.5 text-slate-600 hover:text-slate-900';
+        if (tenderFields) tenderFields.classList.remove('hidden');
+      } else {
+        if (compBtn) compBtn.className = 'py-2.5 bg-slate-900 text-white shadow-sm';
+        if (tenderBtn) tenderBtn.className = 'py-2.5 text-slate-600 hover:text-slate-900';
+        if (tenderFields) tenderFields.classList.add('hidden');
+      }
+    }
+  </script>
 </body>
 </html>
