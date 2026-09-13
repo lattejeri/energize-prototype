@@ -149,11 +149,11 @@
           </div>
 
           <nav class="hidden lg:flex items-center space-x-8 text-sm font-medium text-slate-600">
-            <button onclick="switchTemplate('home')" class="hover:text-slate-950 py-1 transition">Home</button>
-            <button onclick="switchTemplate('why')" class="hover:text-slate-950 py-1 transition">Why Energize</button>
-            <button onclick="switchTemplate('services')" class="hover:text-slate-950 py-1 transition">Services</button>
-            <button onclick="switchTemplate('work')" class="hover:text-slate-950 py-1 transition">Work portfolio</button>
-            <button onclick="switchTemplate('contact')" class="hover:text-slate-950 py-1 transition">Contact</button>
+            <button data-nav="home" onclick="switchTemplate('home')" class="hover:text-slate-950 py-1 transition border-b-2 border-transparent">Home</button>
+            <button data-nav="why" onclick="switchTemplate('why')" class="hover:text-slate-950 py-1 transition border-b-2 border-transparent">Why Energize</button>
+            <button data-nav="services" onclick="switchTemplate('services')" class="hover:text-slate-950 py-1 transition border-b-2 border-transparent">Services</button>
+            <button data-nav="work" onclick="switchTemplate('work')" class="hover:text-slate-950 py-1 transition border-b-2 border-transparent">Work portfolio</button>
+            <button data-nav="contact" onclick="switchTemplate('contact')" class="hover:text-slate-950 py-1 transition border-b-2 border-transparent">Contact</button>
           </nav>
 
           <div class="flex items-center space-x-3">
@@ -175,11 +175,11 @@
 
         <!-- Mobile Navigation Drawer -->
         <div id="mobile-nav-drawer" class="hidden lg:hidden border-t border-slate-200 bg-white px-6 py-4 space-y-3 font-medium text-sm text-slate-700 shadow-lg">
-          <button onclick="switchTemplate('home'); toggleMobileMenu()" class="block w-full text-left py-2 hover:text-slate-950 border-b border-slate-100">Home</button>
-          <button onclick="switchTemplate('why'); toggleMobileMenu()" class="block w-full text-left py-2 hover:text-slate-950 border-b border-slate-100">Why Energize</button>
-          <button onclick="switchTemplate('services'); toggleMobileMenu()" class="block w-full text-left py-2 hover:text-slate-950 border-b border-slate-100">Services</button>
-          <button onclick="switchTemplate('work'); toggleMobileMenu()" class="block w-full text-left py-2 hover:text-slate-950 border-b border-slate-100">Work portfolio</button>
-          <button onclick="switchTemplate('contact'); toggleMobileMenu()" class="block w-full text-left py-2 hover:text-slate-950 border-b border-slate-100">Contact</button>
+          <button data-mobile-nav="home" onclick="switchTemplate('home'); toggleMobileMenu()" class="block w-full text-left py-2 hover:text-slate-950 border-b border-slate-100 transition">Home</button>
+          <button data-mobile-nav="why" onclick="switchTemplate('why'); toggleMobileMenu()" class="block w-full text-left py-2 hover:text-slate-950 border-b border-slate-100 transition">Why Energize</button>
+          <button data-mobile-nav="services" onclick="switchTemplate('services'); toggleMobileMenu()" class="block w-full text-left py-2 hover:text-slate-950 border-b border-slate-100 transition">Services</button>
+          <button data-mobile-nav="work" onclick="switchTemplate('work'); toggleMobileMenu()" class="block w-full text-left py-2 hover:text-slate-950 border-b border-slate-100 transition">Work portfolio</button>
+          <button data-mobile-nav="contact" onclick="switchTemplate('contact'); toggleMobileMenu()" class="block w-full text-left py-2 hover:text-slate-950 border-b border-slate-100 transition">Contact</button>
           <div class="pt-2 flex flex-col gap-2">
             <button onclick="switchTemplate('capability'); toggleMobileMenu()" class="w-full text-center py-2.5 border border-slate-300 text-xs font-semibold">Download capability statement [PDF]</button>
             <button onclick="switchTemplate('quote'); toggleMobileMenu()" class="w-full text-center py-2.5 bg-slate-900 text-white text-xs font-bold">Request a quote →</button>
@@ -1985,6 +1985,25 @@
           <div>© 2026 Energize Electrical Safety Management Pty Ltd. All rights reserved.</div>
           <div class="mt-2 sm:mt-0 font-mono">Schematic prototype v0.3 • WordPress theme blueprint</div>
         </div>
+
+        <!-- Discrete Prototype Template Quick Links -->
+        <div class="max-w-6xl mx-auto border-t border-slate-200 mt-6 pt-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-[11px] text-slate-500 font-mono">
+          <div class="flex items-center gap-2">
+            <span class="bg-slate-200 text-slate-800 font-bold px-2 py-0.5 text-[10px] tracking-wide uppercase">Template Directory</span>
+            <span class="text-slate-400">Direct links to all 9 layout templates:</span>
+          </div>
+          <div class="flex flex-wrap gap-x-4 gap-y-1.5 font-sans text-xs">
+            <a href="#home" onclick="switchTemplate('home'); return false;" class="text-slate-700 hover:text-slate-950 underline underline-offset-2">Home</a>
+            <a href="#why" onclick="switchTemplate('why'); return false;" class="text-slate-700 hover:text-slate-950 underline underline-offset-2">Why Energize</a>
+            <a href="#services" onclick="switchTemplate('services'); return false;" class="text-slate-700 hover:text-slate-950 underline underline-offset-2">Services</a>
+            <a href="#service-detail" onclick="switchTemplate('service-detail'); return false;" class="text-slate-700 hover:text-slate-950 underline underline-offset-2">Service Detail</a>
+            <a href="#work" onclick="switchTemplate('work'); return false;" class="text-slate-700 hover:text-slate-950 underline underline-offset-2">Work Portfolio</a>
+            <a href="#work-detail" onclick="switchTemplate('work-detail'); return false;" class="text-slate-700 hover:text-slate-950 underline underline-offset-2">Project Detail</a>
+            <a href="#contact" onclick="switchTemplate('contact'); return false;" class="text-slate-700 hover:text-slate-950 underline underline-offset-2">Contact</a>
+            <a href="#quote" onclick="switchTemplate('quote'); return false;" class="text-slate-700 hover:text-slate-950 underline underline-offset-2">Request Quote</a>
+            <a href="#capability" onclick="switchTemplate('capability'); return false;" class="text-slate-700 hover:text-slate-950 underline underline-offset-2">Capability Statement</a>
+          </div>
+        </div>
       </footer>
   </main>
 
@@ -1994,7 +2013,37 @@
   <script>
     const templates = ['home', 'why', 'services', 'service-detail', 'work', 'work-detail', 'contact', 'quote', 'capability'];
 
-    function switchTemplate(target) {
+    function updateNavHighlights(target) {
+      const parentMap = {
+        'service-detail': 'services',
+        'work-detail': 'work'
+      };
+      const activeNav = parentMap[target] || target;
+
+      document.querySelectorAll('[data-nav]').forEach(btn => {
+        const navTarget = btn.getAttribute('data-nav');
+        if (navTarget === activeNav) {
+          btn.classList.add('text-slate-950', 'font-bold', 'border-slate-900');
+          btn.classList.remove('text-slate-600', 'font-semibold', 'border-transparent');
+        } else {
+          btn.classList.remove('text-slate-950', 'font-bold', 'border-slate-900');
+          btn.classList.add('text-slate-600', 'font-semibold', 'border-transparent');
+        }
+      });
+
+      document.querySelectorAll('[data-mobile-nav]').forEach(btn => {
+        const navTarget = btn.getAttribute('data-mobile-nav');
+        if (navTarget === activeNav) {
+          btn.classList.add('text-slate-950', 'font-bold', 'bg-slate-50', 'pl-2');
+        } else {
+          btn.classList.remove('text-slate-950', 'font-bold', 'bg-slate-50', 'pl-2');
+        }
+      });
+    }
+
+    function switchTemplate(target, pushHistory = true) {
+      if (!templates.includes(target)) target = 'home';
+
       templates.forEach(t => {
         const el = document.getElementById('template-' + t);
         if (el) {
@@ -2005,8 +2054,46 @@
           }
         }
       });
+
+      updateNavHighlights(target);
+
+      if (pushHistory) {
+        if (window.location.hash !== '#' + target) {
+          history.pushState({ template: target }, '', '#' + target);
+        }
+      }
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    function getTargetFromUrl() {
+      const hash = window.location.hash.replace(/^#/, '').trim().toLowerCase();
+      const params = new URLSearchParams(window.location.search);
+      const pageParam = (params.get('page') || params.get('template') || '').toLowerCase();
+      const candidate = hash || pageParam;
+      return templates.includes(candidate) ? candidate : 'home';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const initial = getTargetFromUrl();
+      switchTemplate(initial, false);
+    });
+
+    window.addEventListener('popstate', (e) => {
+      const target = (e.state && e.state.template) ? e.state.template : getTargetFromUrl();
+      switchTemplate(target, false);
+    });
+
+    window.addEventListener('hashchange', () => {
+      const target = getTargetFromUrl();
+      switchTemplate(target, false);
+    });
+
+    // Run immediately in case script executes after DOM readiness
+    (function() {
+      const initial = getTargetFromUrl();
+      switchTemplate(initial, false);
+    })();
 
     function toggleMobileMenu() {
       const drawer = document.getElementById('mobile-nav-drawer');

@@ -2124,7 +2124,8 @@
       'capability': 'page-capability.php'
     };
 
-    function switchTemplate(target) {
+    function switchTemplate(target, pushHistory = true) {
+      if (!templates.includes(target)) target = 'home';
       templates.forEach(t => {
         const el = document.getElementById('template-' + t);
         const btn = document.getElementById('btn-' + t);
@@ -2144,8 +2145,43 @@
       });
       const labelEl = document.getElementById('wp-template-label');
       if (labelEl) labelEl.innerText = wpLabels[target] || 'template.php';
+
+      if (pushHistory) {
+        if (window.location.hash !== '#' + target) {
+          history.pushState({ template: target }, '', '#' + target);
+        }
+      }
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    function getTargetFromUrl() {
+      const hash = window.location.hash.replace(/^#/, '').trim().toLowerCase();
+      const params = new URLSearchParams(window.location.search);
+      const pageParam = (params.get('page') || params.get('template') || '').toLowerCase();
+      const candidate = hash || pageParam;
+      return templates.includes(candidate) ? candidate : 'home';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const initial = getTargetFromUrl();
+      switchTemplate(initial, false);
+    });
+
+    window.addEventListener('popstate', (e) => {
+      const target = (e.state && e.state.template) ? e.state.template : getTargetFromUrl();
+      switchTemplate(target, false);
+    });
+
+    window.addEventListener('hashchange', () => {
+      const target = getTargetFromUrl();
+      switchTemplate(target, false);
+    });
+
+    (function() {
+      const initial = getTargetFromUrl();
+      switchTemplate(initial, false);
+    })();
 
     function setPhilosophyCard(index) {
       for (let i = 1; i <= 3; i++) {
